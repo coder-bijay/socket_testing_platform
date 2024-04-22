@@ -90,9 +90,6 @@ function Home() {
   }, []);
 
   console.log({ socket, emittedMessage, subscribedMessage, subscribedEvents });
-  console.log({
-    jsonData,
-  });
 
   return (
     <>
