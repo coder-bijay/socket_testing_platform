@@ -57,6 +57,16 @@ export function getStoredSessionAndToken() {
   }
 }
 
+export default function HandleUnauthorizedToken() {
+  cookies.remove("username");
+  cookies.remove("token");
+  cookies.remove("refreshToken");
+  cookies.remove("sessionId");
+  cookies.remove("socketPath");
+  cookies.remove("socketUrl");
+  cookies.remove("baseUrl");
+}
+
 export function formatObject(object: any) {
   return (
     <>

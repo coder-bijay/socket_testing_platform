@@ -187,12 +187,14 @@ function Home() {
                       )}
                     </div>
                   </div>
-                  <ul className="list-decimal h-[60px] px-6 w-full">
-                    <h1 className="font-bold underline">Subscribed events</h1>
-                    {subscribedEvents?.map((item: string, index: number) => (
-                      <li key={`${index}_${item}`}>{item}</li>
-                    ))}
-                  </ul>
+                  {subscribedEvents?.length > 0 && (
+                    <ul className="list-decimal h-[60px] px-6 w-full">
+                      <h1 className="font-bold underline">Subscribed events</h1>
+                      {subscribedEvents?.map((item: string, index: number) => (
+                        <li key={`${index}_${item}`}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <div className="w-full flex flex-col gap-6">
                   <div className="flex flex-col w-full gap-2">
