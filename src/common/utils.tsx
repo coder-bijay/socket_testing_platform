@@ -1,4 +1,5 @@
 import cookies from "js-cookie";
+import { v4 as uuidv4 } from "uuid";
 
 export const setSessionAndToken = ({
   serverBaseUrl,
@@ -76,3 +77,30 @@ export function formatObject(object: any) {
     </>
   );
 }
+
+export const formatString = (originalString: any) => {
+  try {
+    const obj = JSON.parse(originalString);
+    let formatted = "";
+    const keys = Object.keys(obj);
+    keys.forEach((key, index) => {
+      formatted += `"${key}":"${obj[key]}"`;
+      if (index < keys.length - 1) {
+        formatted += ",\n";
+      }
+    });
+    return `{${formatted}}`;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
+};
+
+export const generatePayload = () => {
+  const payload = {
+    messageId: uuidv4(),
+    data: "Hey",
+    createdAt: new Date().toISOString(),
+    groupId: "974c1a3d-b98b-4dee-b67a-da7f858d0dd5",
+  };
+  return payload;
+};
