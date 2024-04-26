@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useConfigurationSlice } from "../_store/userslice";
 import { ErrorMessageContainer } from "../../components/ErrorMessage";
-import { MdContentCopy } from "react-icons/md";
 import { CopyContent } from "@/components/CopyContent";
 
 // user1 = "bijay_subedi_dev2",pw:"3Cna0g$1"
