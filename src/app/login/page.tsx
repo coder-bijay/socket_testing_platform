@@ -28,7 +28,6 @@ const Login = () => {
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
 
-  console.log("darshan");
   const [errorMesage, setErrorMessage] = useState<{
     message: string;
     type: "SUCCESS" | "ERROR" | "";
@@ -127,9 +126,7 @@ const Login = () => {
               <MdContentCopy
                 className="cursor-pointer"
                 onClick={() => {
-                  navigator.clipboard.writeText(
-                    "https://dev-api.marsenger.com/api/v1"
-                  );
+                  navigator.clipboard.writeText("https://chat-app.dev/api/v1");
                 }}
               />
             </div>
@@ -139,8 +136,8 @@ const Login = () => {
           <div className="flex flex-col gap-2">
             <label>Server Base Url</label>
             <input
-              autoComplete="on"
               value={baseUrl}
+              autoComplete="on"
               className="p-2 border border-gray-400 rounded-lg"
               type="text"
               onChange={(e) => {

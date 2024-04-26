@@ -28,9 +28,15 @@ export default function RootLayout({
             <div className="flex flex-row justify-end items-center px-10 w-full">
               {(storedData?.username || configuration?.username) && (
                 <>
+                  <div className="flex items-center gap-2 w-full">
+                    <span className="font-bold">Server : </span>
+                    <span className="font-bold text-blue-500">
+                      {storedData?.serverBaseUrl && storedData?.serverBaseUrl}
+                    </span>
+                  </div>
                   <div className="flex items-center font-bold w-full justify-end gap-2">
                     <span>Username : </span>
-                    <span>
+                    <span className="font-bold text-blue-500">
                       {storedData?.username
                         ? storedData?.username
                         : configuration?.username}
