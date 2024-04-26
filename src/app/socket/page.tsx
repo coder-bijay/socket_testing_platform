@@ -195,7 +195,7 @@ function Home() {
                               socket.off(eventName);
                               const indexOfItem =
                                 subscribedEvents.indexOf(item);
-                              console.log({ indexOfItem, item });
+
                               const filteredEvents = subscribedEvents.slice(
                                 indexOfItem,
                                 1
