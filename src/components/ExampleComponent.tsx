@@ -1,5 +1,6 @@
 import React from "react";
 import { MdContentCopy } from "react-icons/md";
+import { CopyContent } from "./CopyContent";
 
 const channel = [
   {
@@ -71,12 +72,7 @@ export const ExampleComponent = () => {
             >
               <span>{item.title} : </span>
               <span className="text-blue-500">{item.value}</span>
-              <MdContentCopy
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(item.value);
-                }}
-              />
+              <CopyContent content={item.value} />
             </div>
           );
         })}
@@ -91,12 +87,7 @@ export const ExampleComponent = () => {
             >
               <span>{item.title} : </span>
               <span className="text-blue-500">{item.value}</span>
-              <MdContentCopy
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(item.value);
-                }}
-              />
+              <CopyContent content={item.value} />
             </div>
           );
         })}
@@ -111,12 +102,7 @@ export const ExampleComponent = () => {
             >
               <span>{item.title} : </span>
               <span className="text-blue-500">{item.value}</span>
-              <MdContentCopy
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(item.value);
-                }}
-              />
+              <CopyContent content={item.value} />
             </div>
           );
         })}

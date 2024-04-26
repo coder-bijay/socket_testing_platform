@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useConfigurationSlice } from "../_store/userslice";
 import { ErrorMessageContainer } from "../../components/ErrorMessage";
 import { MdContentCopy } from "react-icons/md";
+import { CopyContent } from "@/components/CopyContent";
 
 // user1 = "bijay_subedi_dev2",pw:"3Cna0g$1"
 // user2 = "bijay_subedi_dev",pw:"3Q#Aq@W9"
@@ -97,38 +98,19 @@ const Login = () => {
               <span className="text-blue-500">
                 https://staging-api.marsenger.com/api/v1
               </span>
-              <MdContentCopy
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    "https://staging-api.marsenger.com/api/v1"
-                  );
-                }}
-              />
+              <CopyContent content="https://staging-api.marsenger.com/api/v1" />
             </div>
             <div className="flex flex-row gap-2 items-center">
               <span className="font-bold">Development server :</span>
               <span className="text-blue-500">
                 https://dev-api.marsenger.com/api/v1
               </span>
-              <MdContentCopy
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    "https://dev-api.marsenger.com/api/v1"
-                  );
-                }}
-              />
+              <CopyContent content="https://dev-api.marsenger.com/api/v1" />
             </div>
             <div className="flex flex-row gap-2 items-center">
               <span className="font-bold">Local server :</span>
               <span className="text-blue-500">https://chat-app.dev/api/v1</span>
-              <MdContentCopy
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText("https://chat-app.dev/api/v1");
-                }}
-              />
+              <CopyContent content="https://chat-app.dev/api/v1" />
             </div>
           </div>
           <h1 className="font-bold text-xl">Login Window</h1>

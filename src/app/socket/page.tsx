@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { MdContentCopy } from "react-icons/md";
 import { JsonViewer } from "@textea/json-viewer";
+import { CopyContent } from "@/components/CopyContent";
 
 const storedData = getStoredSessionAndToken();
 
@@ -20,11 +21,8 @@ export const socket = io(`${storedData?.socketUrl}`, {
   path: `${storedData?.socketPath}`,
 });
 
-const copyToClipboard = () => {
-  const payload = generatePayload();
-  const formatedData = formatString(JSON.stringify(payload));
-  navigator.clipboard.writeText(`${formatedData}`);
-};
+const payload = generatePayload();
+const formatedCopyData = formatString(JSON.stringify(payload));
 
 function Home() {
   const [connected, setConnected] = useState(false);
@@ -215,12 +213,9 @@ function Home() {
                     <div className="flex flex-col justify-between items-center">
                       <div className="flex flex-row w-full pb-2 text-sm justify-between items-center">
                         <label>Payload</label>
-                        <span
-                          onClick={copyToClipboard}
-                          className="flex items-center gap-2 cursor-pointer"
-                        >
+                        <span className="flex items-center gap-2 cursor-pointer">
                           Copy payload
-                          <MdContentCopy />
+                          <CopyContent content={`${formatedCopyData}`} />
                         </span>
                       </div>
 
