@@ -62,7 +62,7 @@ function Home() {
 
       subscribedEvents.forEach((item) => {
         const eventListener = (data: any) => {
-          setSubscribedMessage((prev) => [...prev, data]);
+          setSubscribedMessage((prev) => [data, ...prev]);
         };
         socket.on(item, eventListener);
       });
@@ -81,7 +81,7 @@ function Home() {
 
   const sendMessage = (eventName: string) => {
     socket.emit(`${eventName}`, jsonData, (data: any) => {
-      setEmittedMessage((prev) => [...prev, data]);
+      setEmittedMessage((prev) => [data, ...prev]);
     });
   };
 
@@ -179,27 +179,34 @@ function Home() {
                       >
                         Click to Subscribe
                       </button>
-
-                      {subscribedEvents?.length > 0 && (
-                        <button
-                          onClick={() => {
-                            socket.off(eventName);
-                            setSubscribedMessage([]);
-                            setSubscribeEventName("");
-                            setSubscribedEvents([]);
-                          }}
-                          className={`p-2 bg-red-500 cursor-pointer text-sm rounded-lg text-white`}
-                        >
-                          UnSubscribe
-                        </button>
-                      )}
                     </div>
                   </div>
                   {subscribedEvents?.length > 0 && (
                     <ul className="list-decimal h-[60px] px-6 w-full">
                       <h1 className="font-bold underline">Subscribed events</h1>
                       {subscribedEvents?.map((item: string, index: number) => (
-                        <li key={`${index}_${item}`}>{item}</li>
+                        <div
+                          key={`${index}_${item}`}
+                          className="flex items-center gap-2"
+                        >
+                          <li>{item}</li>
+                          <button
+                            onClick={() => {
+                              socket.off(eventName);
+                              const indexOfItem =
+                                subscribedEvents.indexOf(item);
+                              console.log({ indexOfItem, item });
+                              const filteredEvents = subscribedEvents.slice(
+                                indexOfItem,
+                                1
+                              );
+                              setSubscribedEvents(filteredEvents);
+                            }}
+                            className={`p-2 bg-red-500 cursor-pointer text-sm rounded-lg text-white`}
+                          >
+                            UnSubscribe
+                          </button>
+                        </div>
                       ))}
                     </ul>
                   )}
