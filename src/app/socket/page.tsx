@@ -19,6 +19,8 @@ export const socket = io(`${storedData?.socketUrl}`, {
   path: `${storedData?.socketPath}`,
 });
 
+console.log("Console.log");
+
 const copyToClipboard = () => {
   const payload = generatePayload();
   const formatedData = formatString(JSON.stringify(payload));
