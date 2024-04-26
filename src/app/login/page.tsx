@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useConfigurationSlice } from "../_store/userslice";
 import { ErrorMessageContainer } from "../../components/ErrorMessage";
+import { MdContentCopy } from "react-icons/md";
+import { CopyContent } from "@/components/CopyContent";
 
 // user1 = "bijay_subedi_dev2",pw:"3Cna0g$1"
 // user2 = "bijay_subedi_dev",pw:"3Q#Aq@W9"
@@ -90,24 +92,41 @@ const Login = () => {
     <div className="w-full flex justify-center py-6 items-center">
       <div className="w-full lg:w-[700px] pb-20 shadow-lg border rounded-md flex flex-col gap-6 py-5 px-10">
         <div className="p-10 flex flex-col gap-6">
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row gap-2 items-center">
+              <span className="font-bold">Staging server :</span>
+              <span className="text-blue-500">
+                https://staging-api.marsenger.com/api/v1
+              </span>
+              <CopyContent content="https://staging-api.marsenger.com/api/v1" />
+            </div>
+            <div className="flex flex-row gap-2 items-center">
+              <span className="font-bold">Development server :</span>
+              <span className="text-blue-500">
+                https://dev-api.marsenger.com/api/v1
+              </span>
+              <CopyContent content="https://dev-api.marsenger.com/api/v1" />
+            </div>
+            <div className="flex flex-row gap-2 items-center">
+              <span className="font-bold">Local server :</span>
+              <span className="text-blue-500">https://chat-app.dev/api/v1</span>
+              <CopyContent content="https://chat-app.dev/api/v1" />
+            </div>
+          </div>
           <h1 className="font-bold text-xl">Login Window</h1>
+
           <div className="flex flex-col gap-2">
             <label>Server Base Url</label>
-            <select
+            <input
+              value={baseUrl}
               autoComplete="on"
-              defaultValue={baseUrl}
               className="p-2 border border-gray-400 rounded-lg"
+              type="text"
               onChange={(e) => {
                 setBaseUrl(e.target.value);
               }}
-            >
-              <option value="https://staging-api.marsenger.com/api/v1">
-                https://staging-api.marsenger.com/api/v1
-              </option>
-              <option value="https://dev-api.marsenger.com/api/v1">
-                https://dev-api.marsenger.com/api/v1
-              </option>
-            </select>
+              placeholder="Username"
+            />
           </div>
 
           <div className="flex flex-col gap-2">

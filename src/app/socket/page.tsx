@@ -7,7 +7,10 @@ import {
 } from "@/common/utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { MdContentCopy } from "react-icons/md";
+import { MdCheck, MdClearAll, MdContentCopy } from "react-icons/md";
+import { JsonViewer } from "@textea/json-viewer";
+import { CopyContent } from "@/components/CopyContent";
+import { AiOutlineClear } from "react-icons/ai";
 
 const storedData = getStoredSessionAndToken();
 
@@ -19,20 +22,21 @@ export const socket = io(`${storedData?.socketUrl}`, {
   path: `${storedData?.socketPath}`,
 });
 
+<<<<<<< HEAD
 console.log("Console.log");
 
 const copyToClipboard = () => {
+=======
+const CopyPayload = () => {
+>>>>>>> 237af0a1fd046ae7cfb6186101c64d98cd8c38f5
   const payload = generatePayload();
-  const formatedData = formatString(JSON.stringify(payload));
-  navigator.clipboard.writeText(`${formatedData}`);
+  const formatedCopyData = formatString(JSON.stringify(payload));
+  navigator.clipboard.writeText(`${formatedCopyData}`);
 };
 
 function Home() {
   const [connected, setConnected] = useState(false);
   const [jsonData, setJsonData] = useState("");
-  const [selectedTab, setSelectedTab] = useState<"EMITTED" | "SUBSCRIBE">(
-    "EMITTED"
-  );
 
   const [eventName, setEventName] = useState("group:message");
   const [emittedMessage, setEmittedMessage] = useState<any[]>([]);
@@ -42,6 +46,14 @@ function Home() {
   );
   const [subscribedEvents, setSubscribedEvents] = useState<string[]>([]);
   const [subscribedMessage, setSubscribedMessage] = useState<any[]>([]);
+
+  const [isCopied, setIsCopied] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  }, [isCopied]);
 
   socket.auth = {
     token: `Bearer ${storedData?.accessToken}`,
@@ -56,7 +68,7 @@ function Home() {
 
       subscribedEvents.forEach((item) => {
         const eventListener = (data: any) => {
-          setSubscribedMessage((prev) => [...prev, data]);
+          setSubscribedMessage((prev) => [data, ...prev]);
         };
         socket.on(item, eventListener);
       });
@@ -75,7 +87,7 @@ function Home() {
 
   const sendMessage = (eventName: string) => {
     socket.emit(`${eventName}`, jsonData, (data: any) => {
-      setEmittedMessage((prev) => [...prev, data]);
+      setEmittedMessage((prev) => [data, ...prev]);
     });
   };
 
@@ -95,12 +107,12 @@ function Home() {
 
   return (
     <>
-      <div className="flex justify-center p-10 items-center">
-        <div className="flex w-full gap-10">
-          <div className="flex flex-col w-1/2 shadow-md rounded-md border p-4 gap-10">
-            <div className="flex justify-between  w-full gap-10 items-center border-b-4 border-blue-500 pb-2">
+      <div className="flex justify-center px-10 py-4 items-center">
+        <div className="flex w-full gap-8">
+          <div className="flex flex-col w-1/2 shadow-md rounded-md border gap-10">
+            <div className="flex justify-between w-full gap-10 items-center rounded-t-md border-b-2 border-blue-200 py-1 px-2">
               <div
-                className={`h-8 w-8 rounded-full ${
+                className={`h-5 w-5 rounded-full ${
                   connected ? "bg-green-500 animate-pulse" : "bg-red-600"
                 }`}
               />
@@ -119,7 +131,7 @@ function Home() {
                       console.log("Socket has been connected!", socket);
                     });
                   }}
-                  className={`p-2 bg-green-700 ${
+                  className={`p-2 text-sm bg-green-700 ${
                     !eventName
                       ? "bg-gray-500 cursor-not-allowed"
                       : !connected
@@ -140,7 +152,7 @@ function Home() {
                         console.log("Socket has been dis-connected!", socket);
                       });
                     }}
-                    className="p-2 bg-red-500 rounded-lg text-white"
+                    className="p-2 bg-red-500 text-sm rounded-lg text-white"
                   >
                     Disconnect
                   </button>
@@ -150,8 +162,8 @@ function Home() {
 
             {connected ? (
               <>
-                <div className="flex flex-col gap-6 h-fit w-full">
-                  <div className="flex w-full gap-6 justify-between items-center">
+                <div className="flex flex-col px-2 gap-6 h-fit w-full">
+                  <div className="flex w-full gap-6 text-sm justify-between items-center">
                     <input
                       className="p-2 w-1/2 border border-gray-400 rounded-lg"
                       type="text"
@@ -161,7 +173,7 @@ function Home() {
                         setSubscribeEventName(e.target.value);
                       }}
                     />
-                    <div className="w-[340px] justify-end flex items-center gap-6">
+                    <div className="w-[340px] justify-end flex text-sm items-center gap-6">
                       <button
                         disabled={!subscribeEventName}
                         onClick={() => handleSubscribe(subscribeEventName)}
@@ -173,33 +185,40 @@ function Home() {
                       >
                         Click to Subscribe
                       </button>
-
-                      {subscribedEvents?.length > 0 && (
-                        <button
-                          onClick={() => {
-                            socket.off(eventName);
-                            setSubscribedMessage([]);
-                            setSubscribeEventName("");
-                            setSubscribedEvents([]);
-                          }}
-                          className={`p-2  bg-red-500 cursor-pointer rounded-lg text-white`}
-                        >
-                          UnSubscribe
-                        </button>
-                      )}
                     </div>
                   </div>
                   {subscribedEvents?.length > 0 && (
                     <ul className="list-decimal h-[60px] px-6 w-full">
                       <h1 className="font-bold underline">Subscribed events</h1>
                       {subscribedEvents?.map((item: string, index: number) => (
-                        <li key={`${index}_${item}`}>{item}</li>
+                        <div
+                          key={`${index}_${item}`}
+                          className="flex items-center gap-2"
+                        >
+                          <li>{item}</li>
+                          <button
+                            onClick={() => {
+                              socket.off(eventName);
+                              const indexOfItem =
+                                subscribedEvents.indexOf(item);
+
+                              const filteredEvents = subscribedEvents.slice(
+                                indexOfItem,
+                                1
+                              );
+                              setSubscribedEvents(filteredEvents);
+                            }}
+                            className={`p-2 bg-red-500 cursor-pointer text-sm rounded-lg text-white`}
+                          >
+                            UnSubscribe
+                          </button>
+                        </div>
                       ))}
                     </ul>
                   )}
                 </div>
-                <div className="w-full flex flex-col gap-6">
-                  <div className="flex flex-col w-full gap-2">
+                <div className="w-full flex flex-col px-2 gap-6">
+                  <div className="flex text-sm flex-col w-full gap-2">
                     <label>EventName</label>
                     <input
                       className="p-2 w-full border border-gray-400 rounded-lg"
@@ -214,19 +233,28 @@ function Home() {
 
                   <div className="flex flex-col w-full gap-2">
                     <div className="flex flex-col justify-between items-center">
-                      <div className="flex flex-row w-full pb-2 justify-between items-center">
+                      <div className="flex flex-row w-full pb-2 text-sm justify-between items-center">
                         <label>Payload</label>
                         <span
-                          onClick={copyToClipboard}
+                          onClick={() => {
+                            setIsCopied(true);
+                            CopyPayload();
+                          }}
                           className="flex items-center gap-2 cursor-pointer"
                         >
                           Copy payload
-                          <MdContentCopy />
+                          <span>
+                            {isCopied ? (
+                              <MdCheck className="text-green-600" />
+                            ) : (
+                              <MdContentCopy className="cursor-pointer" />
+                            )}
+                          </span>
                         </span>
                       </div>
 
                       <textarea
-                        className="p-2 w-full min-h-[200px] border border-gray-400 text-black rounded-lg"
+                        className="p-2 w-full min-h-[200px] border border-gray-400 text-sm text-black rounded-lg"
                         onChange={(e) => {
                           const inputValue = e?.target?.value;
                           const abcd = inputValue.trim().replaceAll("\n", "");
@@ -246,6 +274,7 @@ function Home() {
                     disabled={!jsonData}
                     onClick={() => {
                       sendMessage(eventName);
+                      CopyPayload();
                     }}
                     className={`${
                       !jsonData
@@ -264,61 +293,58 @@ function Home() {
             )}
           </div>
 
-          <div className="h-[820px] overflow-y-auto w-1/2 shadow-md rounded-md border p-4">
-            <div className="flex justify-between items-center px-10">
-              <h1
-                onClick={() => setSelectedTab("EMITTED")}
-                className={`${
-                  selectedTab === "EMITTED" ? "text-blue-500 underline" : ""
-                } cursor-pointer font-bold text-xl w-full flex justify-center items-center`}
+          <div className="h-full lg:h-[870px] pb-2 overflow-y-auto w-full shadow-md rounded-md border py-2">
+            <div className="grid grid-cols-2">
+              <div
+                className={`border-b-2 border-blue-200 pb-2 w-full flex justify-center gap-10 items-center`}
               >
-                Emitted Message
-              </h1>
-              <h1
-                onClick={() => setSelectedTab("SUBSCRIBE")}
-                className={`${
-                  selectedTab === "SUBSCRIBE" ? "text-blue-500 underline" : ""
-                } cursor-pointer font-bold text-xl w-full flex justify-center items-center`}
+                <span className="font-bold text-md "> Emitted Message</span>
+                {emittedMessage?.length > 0 ? (
+                  <span
+                    onClick={() => setEmittedMessage([])}
+                    className="flex items-center text-red-400 cursor-pointer"
+                  >
+                    Clear <AiOutlineClear className="text-red-400" />
+                  </span>
+                ) : null}
+              </div>
+              <div
+                className={`border-b-2 border-blue-200 pb-2 w-full flex justify-center gap-10 items-center`}
               >
-                Subscribed Message
-              </h1>
-            </div>
-            <div className="my-5 w-full">
-              {selectedTab === "EMITTED" && emittedMessage?.length > 0 && (
-                <div className="flex flex-col w-full gap-2">
-                  {emittedMessage?.map((item: any, index: number) => {
-                    const data = formatObject(item);
-                    return (
-                      <div
-                        className="shadow-lg w-full break-all border-2 border-gray-200 rounded-md flex flex-col gap-2 px-3 py-1 mb-2 text-xs"
-                        key={`${index}`}
-                      >
-                        <span className="text-base w-full flex justify-start">
-                          {data}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {selectedTab === "SUBSCRIBE" && subscribedMessage?.length > 0 && (
-                <div className="flex flex-col w-full gap-2">
-                  {subscribedMessage?.map((item: any, index: number) => {
-                    const data = formatObject(item);
-                    return (
-                      <div
-                        className="shadow-lg w-full break-all border-2 border-gray-200 rounded-md flex flex-col gap-2 px-3 py-1 mb-2 text-xs"
-                        key={`${index}`}
-                      >
-                        <span className="text-base w-full flex justify-start">
-                          {data}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                <span className="font-bold text-md "> Subscribed Message</span>
+                {subscribedMessage?.length > 0 ? (
+                  <span
+                    onClick={() => setSubscribedMessage([])}
+                    className="flex items-center text-red-400 cursor-pointer"
+                  >
+                    Clear <AiOutlineClear className="text-red-400" />
+                  </span>
+                ) : null}
+              </div>
+              <div className="m-2 pr-6 overflow-y-auto h-[790px] border-r-2 border-gray-300">
+                {emittedMessage?.map((item: any, index: number) => {
+                  return (
+                    <div
+                      className="w-full break-all border-2 border-gray-200 rounded-md flex flex-col gap-2 px-3 py-1 mb-2 text-xs"
+                      key={`${index}`}
+                    >
+                      <JsonViewer value={item} />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="m-2 overflow-y-auto h-[790px]">
+                {subscribedMessage?.map((item: any, index: number) => {
+                  return (
+                    <div
+                      className="w-full break-all border-2 border-gray-200 rounded-md flex flex-col gap-2 px-3 py-1 mb-2 text-xs"
+                      key={`${index}`}
+                    >
+                      <JsonViewer value={item} />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
