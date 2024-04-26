@@ -7,9 +7,10 @@ import {
 } from "@/common/utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { MdContentCopy } from "react-icons/md";
+import { MdCheck, MdClearAll, MdContentCopy } from "react-icons/md";
 import { JsonViewer } from "@textea/json-viewer";
 import { CopyContent } from "@/components/CopyContent";
+import { AiOutlineClear } from "react-icons/ai";
 
 const storedData = getStoredSessionAndToken();
 
@@ -21,15 +22,15 @@ export const socket = io(`${storedData?.socketUrl}`, {
   path: `${storedData?.socketPath}`,
 });
 
-const payload = generatePayload();
-const formatedCopyData = formatString(JSON.stringify(payload));
+const CopyPayload = () => {
+  const payload = generatePayload();
+  const formatedCopyData = formatString(JSON.stringify(payload));
+  navigator.clipboard.writeText(`${formatedCopyData}`);
+};
 
 function Home() {
   const [connected, setConnected] = useState(false);
   const [jsonData, setJsonData] = useState("");
-  const [selectedTab, setSelectedTab] = useState<"EMITTED" | "SUBSCRIBE">(
-    "EMITTED"
-  );
 
   const [eventName, setEventName] = useState("group:message");
   const [emittedMessage, setEmittedMessage] = useState<any[]>([]);
@@ -39,6 +40,14 @@ function Home() {
   );
   const [subscribedEvents, setSubscribedEvents] = useState<string[]>([]);
   const [subscribedMessage, setSubscribedMessage] = useState<any[]>([]);
+
+  const [isCopied, setIsCopied] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 1000);
+  }, [isCopied]);
 
   socket.auth = {
     token: `Bearer ${storedData?.accessToken}`,
@@ -213,9 +222,21 @@ function Home() {
                     <div className="flex flex-col justify-between items-center">
                       <div className="flex flex-row w-full pb-2 text-sm justify-between items-center">
                         <label>Payload</label>
-                        <span className="flex items-center gap-2 cursor-pointer">
+                        <span
+                          onClick={() => {
+                            setIsCopied(true);
+                            CopyPayload();
+                          }}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
                           Copy payload
-                          <CopyContent content={`${formatedCopyData}`} />
+                          <span>
+                            {isCopied ? (
+                              <MdCheck className="text-green-600" />
+                            ) : (
+                              <MdContentCopy className="cursor-pointer" />
+                            )}
+                          </span>
                         </span>
                       </div>
 
@@ -240,6 +261,7 @@ function Home() {
                     disabled={!jsonData}
                     onClick={() => {
                       sendMessage(eventName);
+                      CopyPayload();
                     }}
                     className={`${
                       !jsonData
@@ -260,17 +282,33 @@ function Home() {
 
           <div className="h-full lg:h-[870px] pb-2 overflow-y-auto w-full shadow-md rounded-md border py-2">
             <div className="grid grid-cols-2">
-              <h1
-                className={`font-bold text-md border-b-2 border-blue-200 pb-2 w-full flex justify-center items-center`}
+              <div
+                className={`border-b-2 border-blue-200 pb-2 w-full flex justify-center gap-10 items-center`}
               >
-                Emitted Message
-              </h1>
-              <h1
-                className={`font-bold text-md border-b-2 border-blue-200 pb-2 w-full flex justify-center items-center`}
+                <span className="font-bold text-md "> Emitted Message</span>
+                {emittedMessage?.length > 0 ? (
+                  <span
+                    onClick={() => setEmittedMessage([])}
+                    className="flex items-center text-red-400 cursor-pointer"
+                  >
+                    Clear <AiOutlineClear className="text-red-400" />
+                  </span>
+                ) : null}
+              </div>
+              <div
+                className={`border-b-2 border-blue-200 pb-2 w-full flex justify-center gap-10 items-center`}
               >
-                Subscribed Message
-              </h1>
-              <div className="m-2">
+                <span className="font-bold text-md "> Subscribed Message</span>
+                {subscribedMessage?.length > 0 ? (
+                  <span
+                    onClick={() => setSubscribedMessage([])}
+                    className="flex items-center text-red-400 cursor-pointer"
+                  >
+                    Clear <AiOutlineClear className="text-red-400" />
+                  </span>
+                ) : null}
+              </div>
+              <div className="m-2 pr-6 overflow-y-auto h-[790px] border-r-2 border-gray-300">
                 {emittedMessage?.map((item: any, index: number) => {
                   return (
                     <div
@@ -282,7 +320,7 @@ function Home() {
                   );
                 })}
               </div>
-              <div className="m-2">
+              <div className="m-2 overflow-y-auto h-[790px]">
                 {subscribedMessage?.map((item: any, index: number) => {
                   return (
                     <div
