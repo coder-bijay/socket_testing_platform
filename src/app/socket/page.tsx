@@ -10,7 +10,7 @@ import { io } from "socket.io-client";
 import { MdContentCopy } from "react-icons/md";
 
 const storedData = getStoredSessionAndToken();
-console.log("Test Console");
+
 export const socket = io(`${storedData?.socketUrl}`, {
   transports: ["websocket"],
   autoConnect: false,
