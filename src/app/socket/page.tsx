@@ -22,13 +22,7 @@ export const socket = io(`${storedData?.socketUrl}`, {
   path: `${storedData?.socketPath}`,
 });
 
-<<<<<<< HEAD
-console.log("Console.log");
-
-const copyToClipboard = () => {
-=======
 const CopyPayload = () => {
->>>>>>> 237af0a1fd046ae7cfb6186101c64d98cd8c38f5
   const payload = generatePayload();
   const formatedCopyData = formatString(JSON.stringify(payload));
   navigator.clipboard.writeText(`${formatedCopyData}`);
