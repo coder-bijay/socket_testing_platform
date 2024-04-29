@@ -140,6 +140,7 @@ function Home() {
                     onClick={() => {
                       socket.disconnect();
                       setConnected(false);
+                      setSubscribedEvents([]);
                       setEmittedMessage([]);
                       setSubscribedMessage([]);
                       socket.on("disconnect", () => {
@@ -181,35 +182,39 @@ function Home() {
                       </button>
                     </div>
                   </div>
-                  {subscribedEvents?.length > 0 && (
-                    <ul className="list-decimal h-[60px] px-6 w-full">
-                      <h1 className="font-bold underline">Subscribed events</h1>
-                      {subscribedEvents?.map((item: string, index: number) => (
-                        <div
-                          key={`${index}_${item}`}
-                          className="flex items-center gap-2"
-                        >
-                          <li>{item}</li>
-                          <button
-                            onClick={() => {
-                              socket.off(eventName);
-                              const indexOfItem =
-                                subscribedEvents.indexOf(item);
+                  <div className="h-[120px] overflow-y-auto">
+                    {subscribedEvents?.length > 0 && (
+                      <ul className="list-decimal h-[60px] px-6 w-full">
+                        <h1 className="font-bold underline">
+                          Subscribed events
+                        </h1>
+                        {subscribedEvents?.map(
+                          (item: string, index: number) => (
+                            <div
+                              key={`${index}_${item}`}
+                              className="flex items-center gap-2 pb-2"
+                            >
+                              <li>{item}</li>
+                              <button
+                                onClick={() => {
+                                  socket.off(eventName);
+                                  const indexOfItem =
+                                    subscribedEvents.indexOf(item);
+                                  const filteredEvents = [...subscribedEvents];
+                                  filteredEvents.splice(indexOfItem, 1);
 
-                              const filteredEvents = subscribedEvents.slice(
-                                indexOfItem,
-                                1
-                              );
-                              setSubscribedEvents(filteredEvents);
-                            }}
-                            className={`p-2 bg-red-500 cursor-pointer text-sm rounded-lg text-white`}
-                          >
-                            UnSubscribe
-                          </button>
-                        </div>
-                      ))}
-                    </ul>
-                  )}
+                                  setSubscribedEvents(filteredEvents);
+                                }}
+                                className={`p-2 bg-red-500 cursor-pointer text-sm rounded-lg text-white`}
+                              >
+                                UnSubscribe
+                              </button>
+                            </div>
+                          )
+                        )}
+                      </ul>
+                    )}
+                  </div>
                 </div>
                 <div className="w-full flex flex-col px-2 gap-6">
                   <div className="flex text-sm flex-col w-full gap-2">
