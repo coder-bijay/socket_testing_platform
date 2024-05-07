@@ -3,15 +3,17 @@ import { getStoredSessionAndToken, setSessionAndToken } from "@/common/utils";
 import { ExampleComponent } from "@/components/ExampleComponent";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { MdContentCopy } from "react-icons/md";
 
 export default function Home() {
-  const [socketPath, setSocketPath] = useState("");
+  const [socketPath, setSocketPath] = useState("/ws");
   const [socketUrl, setSocketUrl] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const storedData = getStoredSessionAndToken();
 
-  const handleConfiguration = () => {
+  const handleConfiguration = (event: any) => {
+    setLoading(true);
+    event.preventDefault();
     setSessionAndToken({
       accessToken: storedData?.accessToken,
       refreshToken: storedData?.refreshToken,
@@ -22,6 +24,7 @@ export default function Home() {
       socketPath: socketPath,
     });
     router.push("/socket");
+    setLoading(false);
   };
   return (
     <>
@@ -31,11 +34,15 @@ export default function Home() {
             <h1 className="font-bold">Examples</h1>
             <ExampleComponent />
           </div>
-          <div className="mt-10 flex flex-col gap-6">
+          <form
+            onSubmit={handleConfiguration}
+            className="mt-10 flex flex-col gap-6"
+          >
             <h1 className="font-bold text-xl">Configuration Window</h1>
             <div className="flex flex-col gap-2">
               <label>Socket Url</label>
               <input
+                autoFocus={true}
                 className="p-2 border border-gray-400 rounded-lg"
                 type="text"
                 value={socketUrl}
@@ -54,24 +61,22 @@ export default function Home() {
                 onChange={(e) => {
                   setSocketPath(e.target.value);
                 }}
-                placeholder={`Enter socket Path ( /group-ws/ )`}
+                placeholder={`Enter socket Path ( /ws )`}
               />
             </div>
 
             <button
-              disabled={!socketPath && !socketUrl}
-              onClick={() => {
-                handleConfiguration();
-              }}
+              disabled={!!socketPath && !!socketUrl && loading}
+              type="submit"
               className={`p-2 w-24 ${
-                !socketPath && !socketUrl
-                  ? "bg-blue-300 cursor-not-allowed"
-                  : "bg-blue-600 cursor-pointer"
+                !!socketPath && !!socketUrl && loading
+                  ? "bg-blue-300 !cursor-not-allowed"
+                  : "bg-blue-600 !cursor-pointer"
               }  rounded-lg text-white`}
             >
-              Submit
+              {loading ? "Loading..." : "Submit"}
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </>

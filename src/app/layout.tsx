@@ -6,6 +6,7 @@ import HandleUnauthorizedToken, {
   getStoredSessionAndToken,
 } from "@/common/utils";
 import { useConfigurationSlice } from "./_store/userslice";
+import { CopyContent } from "@/components/CopyContent";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,19 +35,38 @@ export default function RootLayout({
                       {storedData?.serverBaseUrl && storedData?.serverBaseUrl}
                     </span>
                   </div>
-                  <div className="flex items-center font-bold w-full justify-end gap-2">
-                    <span>Username : </span>
-                    <span className="font-bold text-blue-500">
-                      {storedData?.username
-                        ? storedData?.username
-                        : configuration?.username}
-                    </span>
+
+                  <div className="flex items-center gap-6">
+                    <div className="flex flex-col font-bold w-[500px]">
+                      <div className="flex gap-2">
+                        <span>Username : </span>
+                        <span className="font-bold text-blue-500">
+                          {storedData?.username
+                            ? storedData?.username
+                            : configuration?.username}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span>UserId : </span>
+                        <span className="font-bold flex gap-2 items-center text-blue-500">
+                          {storedData?.userId
+                            ? storedData?.userId
+                            : configuration?.userId}
+
+                          <CopyContent
+                            content={
+                              storedData?.userId || configuration?.userId
+                            }
+                          />
+                        </span>
+                      </div>
+                    </div>
                     <div
                       onClick={() => {
                         HandleUnauthorizedToken();
                         window.location.reload();
                       }}
-                      className="ml-20 bg-blue-400 text-white rounded-md cursor-pointer px-4 p-2"
+                      className="bg-blue-400 text-white rounded-md cursor-pointer px-4 p-2"
                     >
                       Logout
                     </div>

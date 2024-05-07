@@ -1,70 +1,29 @@
 import React from "react";
-import { MdContentCopy } from "react-icons/md";
 import { CopyContent } from "./CopyContent";
 
-const channel = [
+const socketUrlAndPath = [
   {
     title: "Development Socket Url",
-    value: "https://dev-channel.marsenger.com",
+    value: "https://dev-messaging.marsenger.com",
   },
-  {
-    title: "Development Socket Path",
-    value: "/channel-ws",
-  },
-  {
-    title: "Staging Socket Url",
-    value: "https://staging-channel.marsenger.com",
-  },
-  {
-    title: "Staging Socket Path",
-    value: "/channel-ws",
-  },
-];
 
-const p2p = [
   {
-    title: "Development Socket Url",
-    value: "https://dev-chat.marsenger.com",
+    title: "Local Socket Url",
+    value: "https://chat-app.dev",
   },
-  {
-    title: "Development Socket Path",
-    value: "/p2p-ws",
-  },
-  {
-    title: "Staging Socket Url",
-    value: "https://staging-chat.marsenger.com",
-  },
-  {
-    title: "Staging Socket Path",
-    value: "/p2p-ws",
-  },
-];
 
-const Group = [
-  {
-    title: "Development Socket Url",
-    value: "https://dev-group.marsenger.com",
-  },
-  {
-    title: "Development Socket Path",
-    value: "/group-ws",
-  },
   {
     title: "Staging Socket Url",
-    value: "https://staging-group.marsenger.com",
-  },
-  {
-    title: "Staging Socket Path",
-    value: "/group-ws",
+    value: "https://staging-messaging.marsenger.com",
   },
 ];
 
 export const ExampleComponent = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-      <div className="flex flex-col gap-2 shadow-lg border rounded-md p-2">
-        <h1 className="text-blue-500 font-bold underline pb-4">Group</h1>
-        {Group?.map((item, index) => {
+    <div className="grid grid-cols-1 gap-6">
+      <div className="flex flex-col p-6 gap-2 shadow-lg border rounded-md">
+        <h1 className="text-blue-500 font-bold underline pb-4">Socket</h1>
+        {socketUrlAndPath?.map((item, index) => {
           return (
             <div
               className="flex font-bold flex-row items-center text-gray-400 gap-2"
@@ -76,36 +35,11 @@ export const ExampleComponent = () => {
             </div>
           );
         })}
-      </div>
-      <div className="flex flex-col gap-2 shadow-lg border rounded-md p-2">
-        <h1 className="text-blue-500 font-bold underline pb-4">P2P</h1>
-        {p2p?.map((item, index) => {
-          return (
-            <div
-              className="flex font-bold flex-row items-center text-gray-400 gap-2"
-              key={index}
-            >
-              <span>{item.title} : </span>
-              <span className="text-blue-500">{item.value}</span>
-              <CopyContent content={item.value} />
-            </div>
-          );
-        })}
-      </div>
-      <div className="flex flex-col gap-2 shadow-lg border rounded-md p-2">
-        <h1 className="text-blue-500 font-bold underline pb-4">Channel</h1>
-        {channel?.map((item, index) => {
-          return (
-            <div
-              className="flex font-bold flex-row items-center text-gray-400 gap-2"
-              key={index}
-            >
-              <span>{item.title} : </span>
-              <span className="text-blue-500">{item.value}</span>
-              <CopyContent content={item.value} />
-            </div>
-          );
-        })}
+        <div className="flex font-bold flex-row items-center text-gray-400 gap-2">
+          <span>Socket Path : </span>
+          <span className="text-blue-500">/ws</span>
+          <CopyContent content={`/ws`} />
+        </div>
       </div>
     </div>
   );

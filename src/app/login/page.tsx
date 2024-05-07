@@ -28,7 +28,8 @@ const Login = () => {
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
 
-  const [errorMesage, setErrorMessage] = useState<{
+  const [loading, setLoading] = useState(false);
+  const [responseMessage, setResponseMessage] = useState<{
     message: string;
     type: "SUCCESS" | "ERROR" | "";
   }>({
@@ -44,14 +45,16 @@ const Login = () => {
 
   useEffect(() => {
     return () => {
-      setErrorMessage({
+      setResponseMessage({
         message: "",
         type: "",
       });
     };
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
     try {
       const { data } = await axios.post(`${baseUrl}/auth/login`, {
         username,
@@ -66,6 +69,7 @@ const Login = () => {
         refreshToken: data?.data?.refreshToken,
         sessionId: data?.data?.sessionId,
         username: data?.data?.user?.username,
+        userId: data?.data?.user?.id,
         socketUrl: "",
         socketPath: "",
       });
@@ -73,17 +77,19 @@ const Login = () => {
       setConfiguration({
         username: data?.data?.user?.username,
       });
-      setErrorMessage({
+      setResponseMessage({
         message: "Successfully Logged in",
         type: "SUCCESS",
       });
       router.push("/");
     } catch (err: any) {
       console.log(err);
-      setErrorMessage({
+      setResponseMessage({
         message: err?.response?.data?.message,
         type: "ERROR",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,72 +119,70 @@ const Login = () => {
             </div>
           </div>
           <h1 className="font-bold text-xl">Login Window</h1>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label>Server Base Url</label>
+              <input
+                value={baseUrl}
+                autoComplete="on"
+                className="p-2 border border-gray-400 rounded-lg"
+                type="text"
+                onChange={(e) => {
+                  setBaseUrl(e.target.value);
+                }}
+                placeholder="Username"
+              />
+            </div>
 
-          <div className="flex flex-col gap-2">
-            <label>Server Base Url</label>
-            <input
-              value={baseUrl}
-              autoComplete="on"
-              className="p-2 border border-gray-400 rounded-lg"
-              type="text"
-              onChange={(e) => {
-                setBaseUrl(e.target.value);
-              }}
-              placeholder="Username"
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <label>Username</label>
+              <input
+                autoComplete="on"
+                className="p-2 border border-gray-400 rounded-lg"
+                type="text"
+                onChange={(e) => {
+                  setusername(e.target.value);
+                }}
+                placeholder="Username"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label>Password</label>
+              <input
+                autoComplete="on"
+                className="p-2 border border-gray-400 rounded-lg"
+                type="text"
+                onChange={(e) => {
+                  setpassword(e.target.value);
+                }}
+                placeholder="Password"
+              />
+            </div>
+            {responseMessage?.message && (
+              <ErrorMessageContainer
+                type={responseMessage?.type}
+                message={responseMessage?.message}
+                onClose={() =>
+                  setResponseMessage({
+                    message: "",
+                    type: "",
+                  })
+                }
+              />
+            )}
 
-          <div className="flex flex-col gap-2">
-            <label>Username</label>
-            <input
-              autoComplete="on"
-              className="p-2 border border-gray-400 rounded-lg"
-              type="text"
-              onChange={(e) => {
-                setusername(e.target.value);
-              }}
-              placeholder="Username"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label>Password</label>
-            <input
-              autoComplete="on"
-              className="p-2 border border-gray-400 rounded-lg"
-              type="text"
-              onChange={(e) => {
-                setpassword(e.target.value);
-              }}
-              placeholder="Password"
-            />
-          </div>
-          {errorMesage?.message && (
-            <ErrorMessageContainer
-              type={errorMesage?.type}
-              message={errorMesage?.message}
-              onClose={() =>
-                setErrorMessage({
-                  message: "",
-                  type: "",
-                })
-              }
-            />
-          )}
-
-          <button
-            disabled={!username && !password}
-            onClick={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
-            className={`p-2 bg-gray-700 ${
-              !username && !password
-                ? "bg-blue-300 cursor-not-allowed"
-                : "bg-blue-600 cursor-pointer"
-            } rounded-lg text-white`}
-          >
-            Submit
-          </button>
+            <button
+              disabled={!username && !password && loading}
+              type="submit"
+              className={`p-2 bg-gray-700 ${
+                !username && !password && loading
+                  ? "!bg-blue-300 !cursor-not-allowed"
+                  : "!bg-blue-600 !cursor-pointer"
+              } rounded-lg text-white`}
+            >
+              {loading ? "Loading..." : "Submit"}
+            </button>
+          </form>
         </div>
       </div>
     </div>

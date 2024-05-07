@@ -9,6 +9,7 @@ export const setSessionAndToken = ({
   socketUrl,
   socketPath,
   username,
+  userId,
 }: {
   serverBaseUrl?: string;
   accessToken?: string;
@@ -17,6 +18,7 @@ export const setSessionAndToken = ({
   socketUrl?: string;
   socketPath?: string;
   username?: string;
+  userId?: string;
 }) => {
   serverBaseUrl && cookies.set("baseUrl", serverBaseUrl);
   accessToken && cookies.set("token", accessToken);
@@ -25,6 +27,7 @@ export const setSessionAndToken = ({
   socketUrl && cookies.set("socketUrl", socketUrl);
   socketPath && cookies.set("socketPath", socketPath);
   username && cookies.set("username", username);
+  userId && cookies.set("userId", userId);
 };
 
 export function getStoredSessionAndToken() {
@@ -35,6 +38,7 @@ export function getStoredSessionAndToken() {
   let socketUrl: string | undefined;
   let socketPath: string | undefined;
   let username: string | undefined;
+  let userId: string | undefined;
 
   if (typeof window !== "undefined") {
     serverBaseUrl = cookies.get("baseUrl");
@@ -44,6 +48,7 @@ export function getStoredSessionAndToken() {
     socketUrl = cookies.get("socketUrl");
     socketPath = cookies.get("socketPath");
     username = cookies.get("username");
+    userId = cookies.get("userId");
 
     return {
       serverBaseUrl,
@@ -53,12 +58,14 @@ export function getStoredSessionAndToken() {
       socketUrl,
       socketPath,
       username,
+      userId,
     };
   }
 }
 
 export default function HandleUnauthorizedToken() {
   cookies.remove("username");
+  cookies.remove("userId");
   cookies.remove("token");
   cookies.remove("refreshToken");
   cookies.remove("sessionId");
@@ -113,4 +120,93 @@ export const generatePayload = () => {
     groupId: "974c1a3d-b98b-4dee-b67a-da7f858d0dd5",
   };
   return payload;
+};
+
+export const subscribeEventList = {
+  MESSAGE_RESPONSE: "message-response",
+  MESSAGE_REACT_RESPONSE: "message:react-response",
+  MESSAGE_HISTORY_RESPONSE: "message:history-response",
+  MESSAGE_TYPING_RESPONSE: "message:typing-response",
+  MESSAGE_PIN_RESPONSE: "message:pin-response",
+  MESSAGE_UNPIN_RESPONSE: "message:unpin-response",
+  MESSAGE_READ_RESPONSE: "message:read-response",
+  MESSAGE_REPLY_RESPONSE: "message:reply-response",
+  MESSAGE_DELETE_RESPONSE: "message:delete-response",
+  MESSAGE_DELETE_FOR_ME_RESPONSE: "message:delete-for-me-response",
+  MESSAGE_ACTION_RESPONSE: "message:action-response",
+  MESSAGE_EDIT_RESPONSE: "message:edit-response",
+  MESSAGE_RECEIVED_RESPONSE: "message:received-response",
+
+  USER_UPDATE_RESPONSE: "user:update-response",
+  PROFILE_UPDATE_RESPONSE: "profile:update-response",
+  STATUS_UPDATE_RESPONSE: "status:update-response",
+  ONLINE_FRIENDS_RESPONSE: "online:friends-response",
+  CHANNEL_MESSAGE_RESPONSE: "channel:message-response",
+  CHANNEL_USER_UPDATE_RESPONSE: "channel-user:update-response",
+  CHANNEL_PROFILE_UPDATE_RESPONSE: "channel-profile:update-response",
+  CHANNEL_CREATE_RESPONSE: "channel:create-response",
+  CHANNEL_ADD_MEMBER_RESPONSE: "channel:add-member-response",
+  CHANNEL_NEW_MEMBER_RESPONSE: "channel:new-member-response",
+  CHANNEL_EDIT_RESPONSE: "channel:edit-response",
+  CHANNEL_DELETE_RESPONSE: "channel:delete-response",
+  CHANNEL_JOIN_RESPONSE: "channel:join-response",
+  CHANNEL_LEAVE_RESPONSE: "channel:leave-response",
+  CHANNEL_REMOVE_RESPONSE: "channel:remove-response",
+  CHANNEL_REACTION_STATUS_RESPONSE: "channel:reaction-status-response",
+  CHANNEL_ANONYMOUS_USER_RESPONSE: "channel:anonymous-user-response",
+  CHANNEL_PERMISSION_SETTING_UPDATE_RESPONSE:
+    "channel-permission-setting:update-response",
+  CHANNEL_MUTED_RESPONSE: "channel:muted-response",
+
+  GROUP_CREATED_RESPONSE: "group:created-response",
+  GROUP_ADD_MEMBER_RESPONSE: "group:add-member-response",
+  GROUP_NEW_MEMBER_RESPONSE: "group:new-member-response",
+  GROUP_UPDATE_RESPONSE: "group:update-response",
+  GROUP_LEAVE_RESPONSE: "group:leave-response",
+  GROUP_DELETE_RESPONSE: "group:delete-response",
+  GROUP_REMOVE_RESPONSE: "group:remove-response",
+  GROUP_ASSIGN_ROLE_RESPONSE: "group:assign-role-response",
+  GROUP_REACTION_STATUS_RESPONSE: "group:reaction-status-response",
+  GROUP_ANONYMOUS_USER_RESPONSE: "group:anonymous-user-response",
+  GROUP_MUTED_RESPONSE: "group:muted-response",
+  GROUP_MUTED_UNTIL_RESPONSE: "group:muted-until-response",
+  GROUP_BLOCKED_MEMBER_RESPONSE: "group:blocked-member-response",
+  GROUP_PERMISSION_SETTING_UPDATE_RESPONSE:
+    "group-permission-setting:update-response",
+  GROUP_BLACKLIST_MEMBER_RESPONSE: "group:blacklist-member-response",
+  GROUP_REMOVE_BLACKLIST_MEMBER_RESPONSE:
+    "group:remove-blacklist-member-response",
+  GROUP_USER_UPDATE_RESPONSE: "group-user:update-response",
+  GROUP_PROFILE_UPDATE_RESPONSE: "group-profile:update-response",
+
+  GROUP_MESSAGE_RESPONSE: "group:message-response",
+  GROUP_MESSAGE_REPLY_RESPONSE: "group:message-reply-response",
+  GROUP_MESSAGE_REACT_RESPONSE: "group:message-react-response",
+  GROUP_MESSAGE_RECEIVED_RESPONSE: "group:message-received-response",
+  GROUP_HISTORY_RESPONSE: "group:history-response",
+  GROUP_MESSAGE_TYPING_RESPONSE: "group:message-typing-response",
+  GROUP_MESSAGE_READ_RESPONSE: "group:message-read-response",
+  GROUP_MESSAGE_DELETE_RESPONSE: "group:message-delete-response",
+  GROUP_MESSAGE_DELETE_FOR_ME_RESPONSE: "group:message-delete-for-me-response",
+  GROUP_MESSAGE_EDIT_RESPONSE: "group:message-edit-response",
+  GROUP_MESSAGE_PIN_RESPONSE: "group:message-pin-response",
+
+  CHANNEL_MESSAGE_EDIT_RESPONSE: "channel:message-edit-response",
+  CHANNEL_MESSAGE_REPLY_RESPONSE: "channel:message-reply-response",
+  CHANNEL_MESSAGE_REACT_RESPONSE: "channel:message-react-response",
+  CHANNEL_MESSAGE_PIN_RESPONSE: "channel:message-pin-response",
+  CHANNEL_MESSAGE_DELETE_RESPONSE: "channel:message-delete-response",
+  CHANNEL_MESSAGE_REPLY_DELETE_RESPONSE: "channel:reply-delete-for-me-response",
+  CHANNEL_MESSAGE_REPLY_DELETE_EVERYONE_RESPONSE:
+    "channel:reply-delete-for-everyone-response",
+};
+
+export const handleSubscribeAllEvents = ({
+  setSubscribedEvents,
+}: {
+  setSubscribedEvents: any;
+}) => {
+  Object.entries(subscribeEventList)?.forEach((item) => {
+    setSubscribedEvents((prev: any) => [...prev, item[1]]);
+  });
 };
