@@ -15,6 +15,7 @@ import {
   MdContentCopy,
 } from "react-icons/md";
 import { MessageContainer } from "../../components/MessageContainer";
+import { AiOutlineClear } from "react-icons/ai";
 
 const storedData = getStoredSessionAndToken();
 
@@ -39,12 +40,10 @@ function Home() {
   const [eventName, setEventName] = useState("group:message");
   const [emittedMessage, setEmittedMessage] = useState<any[]>([]);
 
-  const [subscribeEventName, setSubscribeEventName] = useState(
-    "group:message-response"
-  );
+  const [subscribeEventName, setSubscribeEventName] = useState("");
   const [subscribedEvents, setSubscribedEvents] = useState<string[]>([]);
   const [subscribedMessage, setSubscribedMessage] = useState<any[]>([]);
-  const [showSubscribedList, setShowSubscribedList] = useState(false);
+  const [showSubscribedList, setShowSubscribedList] = useState(true);
 
   const [isCopied, setIsCopied] = useState(false);
 
@@ -67,12 +66,12 @@ function Home() {
 
       subscribedEvents.forEach((item) => {
         const eventListener = (data: any) => {
-          setSubscribedMessage((prev) => [{ [eventName]: data }, ...prev]);
+          setSubscribedMessage((prev) => [{ [item]: data }, ...prev]);
         };
         socket.on(item, eventListener);
       });
     }
-  }, [connected, subscribedEvents, setSubscribedMessage, eventName]);
+  }, [connected, subscribedEvents, setSubscribedMessage]);
 
   useEffect(() => {
     memoizedCallback();
@@ -91,8 +90,10 @@ function Home() {
   };
 
   const handleSubscribe = (eventName: string) => {
-    setSubscribedEvents((prev) => [...prev, eventName]);
-    setSubscribeEventName("");
+    if (!subscribedEvents.includes(eventName)) {
+      setSubscribedEvents((prev) => [...prev, eventName]);
+      setSubscribeEventName("");
+    }
   };
 
   useEffect(() => {
@@ -126,6 +127,7 @@ function Home() {
                   onClick={() => {
                     socket.connect();
                     setConnected(true);
+                    setSubscribedEvents(["exception"]);
                     socket.on("connect", () => {
                       console.log("Socket has been connected!", socket);
                     });
@@ -189,7 +191,10 @@ function Home() {
 
                       <button
                         onClick={() =>
-                          handleSubscribeAllEvents({ setSubscribedEvents })
+                          handleSubscribeAllEvents({
+                            setSubscribedEvents,
+                            subscribedEvents,
+                          })
                         }
                         className={`p-2 bg-green-700 cursor-pointer rounded-lg text-white `}
                       >
@@ -213,17 +218,32 @@ function Home() {
                     <div className="h-[260px] overflow-y-auto">
                       {subscribedEvents?.length > 0 && (
                         <ul className="list-decimal h-[60px] px-6 w-full">
-                          <h1 className="font-bold text-[14px] underline">
-                            Subscribed events
-                          </h1>
+                          <div className="flex gap-4 items-center">
+                            <h1 className="font-bold text-[14px] underline">
+                              Subscribed events
+                            </h1>
+                            <span
+                              onClick={() => {
+                                setSubscribedEvents((prev) => {
+                                  // Filter out the provided value
+                                  return prev.filter(
+                                    (eventName) => eventName === "exception"
+                                  );
+                                });
+                              }}
+                              className="flex items-center text-red-400 cursor-pointer"
+                            >
+                              Clear <AiOutlineClear className="text-red-400" />
+                            </span>
+                          </div>
                           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                             {[...new Set(subscribedEvents)]?.map(
                               (item: string, index: number) => (
                                 <div
                                   key={`${index}_${item}`}
-                                  className="flex items-center text-[12px] gap-2"
+                                  className="flex items-center text-[12px] w-full gap-2"
                                 >
-                                  <li>{item}</li>
+                                  <li className="w-[85%]">{item}</li>
                                   <MdClose
                                     className="text-white bg-red-500 cursor-pointer"
                                     onClick={() => {
@@ -248,6 +268,7 @@ function Home() {
                     </div>
                   )}
                 </div>
+
                 <div className="w-full flex flex-col px-2 gap-6">
                   <div className="flex text-sm flex-col w-full gap-2">
                     <label>EventName</label>
@@ -286,6 +307,7 @@ function Home() {
 
                       <textarea
                         className="p-2 w-full min-h-[200px] border border-gray-400 text-sm text-black rounded-lg"
+                        defaultValue={""}
                         onChange={(e) => {
                           const inputValue = e?.target?.value;
                           const abcd = inputValue.trim().replaceAll("\n", "");
@@ -303,11 +325,10 @@ function Home() {
                   </div>
                   <button
                     disabled={!jsonData}
-                    type="submit"
-                    onClick={(e: any) => {
-                      e.preventDefault();
+                    onClick={() => {
                       sendMessage(eventName);
                       CopyPayload();
+                      setJsonData("");
                     }}
                     className={`${
                       !jsonData

@@ -117,12 +117,13 @@ export const generatePayload = () => {
     messageId: uuidv4(),
     data: "Hey",
     createdAt: new Date().toISOString(),
-    groupId: "974c1a3d-b98b-4dee-b67a-da7f858d0dd5",
+    groupId: "ab775113-8e44-4a90-bada-784cd9b59111",
   };
   return payload;
 };
 
 export const subscribeEventList = {
+  // p2p
   MESSAGE_RESPONSE: "message-response",
   MESSAGE_REACT_RESPONSE: "message:react-response",
   MESSAGE_HISTORY_RESPONSE: "message:history-response",
@@ -137,10 +138,13 @@ export const subscribeEventList = {
   MESSAGE_EDIT_RESPONSE: "message:edit-response",
   MESSAGE_RECEIVED_RESPONSE: "message:received-response",
 
+  // others
   USER_UPDATE_RESPONSE: "user:update-response",
   PROFILE_UPDATE_RESPONSE: "profile:update-response",
   STATUS_UPDATE_RESPONSE: "status:update-response",
   ONLINE_FRIENDS_RESPONSE: "online:friends-response",
+
+  // channel
   CHANNEL_MESSAGE_RESPONSE: "channel:message-response",
   CHANNEL_USER_UPDATE_RESPONSE: "channel-user:update-response",
   CHANNEL_PROFILE_UPDATE_RESPONSE: "channel-profile:update-response",
@@ -157,7 +161,17 @@ export const subscribeEventList = {
   CHANNEL_PERMISSION_SETTING_UPDATE_RESPONSE:
     "channel-permission-setting:update-response",
   CHANNEL_MUTED_RESPONSE: "channel:muted-response",
+  CHANNEL_MUTED_UNTIL_RESPONSE: "channel:muted-until-response",
+  CHANNEL_MESSAGE_DELETE_RESPONSE: "channel:message-delete-response",
+  CHANNEL_MESSAGE_EDIT_RESPONSE: "channel:message-edit-response",
+  CHANNEL_MESSAGE_REPLY_RESPONSE: "channel:message-reply-response",
+  CHANNEL_MESSAGE_REACT_RESPONSE: "channel:message-react-response",
+  CHANNEL_MESSAGE_PIN_RESPONSE: "channel:message-pin-response",
+  CHANNEL_MESSAGE_REPLY_DELETE_RESPONSE: "channel:reply-delete-for-me-response",
+  CHANNEL_MESSAGE_REPLY_DELETE_EVERYONE_RESPONSE:
+    "channel:reply-delete-for-everyone-response",
 
+  // group
   GROUP_CREATED_RESPONSE: "group:created-response",
   GROUP_ADD_MEMBER_RESPONSE: "group:add-member-response",
   GROUP_NEW_MEMBER_RESPONSE: "group:new-member-response",
@@ -178,7 +192,6 @@ export const subscribeEventList = {
     "group:remove-blacklist-member-response",
   GROUP_USER_UPDATE_RESPONSE: "group-user:update-response",
   GROUP_PROFILE_UPDATE_RESPONSE: "group-profile:update-response",
-
   GROUP_MESSAGE_RESPONSE: "group:message-response",
   GROUP_MESSAGE_REPLY_RESPONSE: "group:message-reply-response",
   GROUP_MESSAGE_REACT_RESPONSE: "group:message-react-response",
@@ -190,23 +203,17 @@ export const subscribeEventList = {
   GROUP_MESSAGE_DELETE_FOR_ME_RESPONSE: "group:message-delete-for-me-response",
   GROUP_MESSAGE_EDIT_RESPONSE: "group:message-edit-response",
   GROUP_MESSAGE_PIN_RESPONSE: "group:message-pin-response",
-
-  CHANNEL_MESSAGE_EDIT_RESPONSE: "channel:message-edit-response",
-  CHANNEL_MESSAGE_REPLY_RESPONSE: "channel:message-reply-response",
-  CHANNEL_MESSAGE_REACT_RESPONSE: "channel:message-react-response",
-  CHANNEL_MESSAGE_PIN_RESPONSE: "channel:message-pin-response",
-  CHANNEL_MESSAGE_DELETE_RESPONSE: "channel:message-delete-response",
-  CHANNEL_MESSAGE_REPLY_DELETE_RESPONSE: "channel:reply-delete-for-me-response",
-  CHANNEL_MESSAGE_REPLY_DELETE_EVERYONE_RESPONSE:
-    "channel:reply-delete-for-everyone-response",
 };
 
 export const handleSubscribeAllEvents = ({
   setSubscribedEvents,
+  subscribedEvents,
 }: {
   setSubscribedEvents: any;
+  subscribedEvents: string[];
 }) => {
   Object.entries(subscribeEventList)?.forEach((item) => {
-    setSubscribedEvents((prev: any) => [...prev, item[1]]);
+    !subscribedEvents.includes(item[1]) &&
+      setSubscribedEvents((prev: any) => [...prev, item[1]]);
   });
 };

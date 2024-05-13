@@ -29,26 +29,51 @@ export default function RootLayout({
             <div className="flex flex-row justify-end items-center px-10 w-full">
               {(storedData?.username || configuration?.username) && (
                 <>
-                  <div className="flex items-center gap-2 w-full">
-                    <span className="font-bold">Server : </span>
-                    <span className="font-bold text-blue-500">
-                      {storedData?.serverBaseUrl && storedData?.serverBaseUrl}
-                    </span>
+                  <div className="flex flex-col w-full">
+                    <div className="flex gap-2">
+                      <span className="font-bold text-[14px]">Server : </span>
+                      <span className="font-bold text-[14px] text-blue-500 flex gap-2 items-center">
+                        {storedData?.serverBaseUrl && storedData?.serverBaseUrl}
+                        <CopyContent
+                          content={
+                            storedData?.serverBaseUrl
+                              ? storedData?.serverBaseUrl
+                              : ""
+                          }
+                        />
+                      </span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <span className="font-bold text-[14px]">
+                        Socket url :
+                      </span>
+                      <span className="font-bold text-[14px] text-blue-500 flex gap-2 items-center">
+                        {storedData?.socketUrl && storedData?.socketUrl}
+                        <CopyContent
+                          content={
+                            storedData?.socketUrl ? storedData?.socketUrl : ""
+                          }
+                        />
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <div className="flex flex-col font-bold w-[500px]">
+                    <div className="flex flex-col w-[500px]">
                       <div className="flex gap-2">
-                        <span>Username : </span>
-                        <span className="font-bold text-blue-500">
+                        <span className="font-bold text-[14px]">
+                          Username :
+                        </span>
+                        <span className="font-bold text-[14px] text-blue-500">
                           {storedData?.username
                             ? storedData?.username
                             : configuration?.username}
                         </span>
                       </div>
                       <div className="flex gap-2">
-                        <span>UserId : </span>
-                        <span className="font-bold flex gap-2 items-center text-blue-500">
+                        <span className="font-bold text-[14px]">UserId : </span>
+                        <span className="font-bold text-[14px] flex gap-2 items-center text-blue-500">
                           {storedData?.userId
                             ? storedData?.userId
                             : configuration?.userId}

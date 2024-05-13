@@ -20,7 +20,12 @@ export const MessageContainer = ({
           <div
             className={`border-b-2 border-blue-200 w-full flex justify-center gap-10 items-center`}
           >
-            <span className="font-bold text-[13px]"> Emitted Message</span>
+            <span className="font-bold text-[13px] flex gap-2 items-center">
+              Emitted Message
+              <span className="text-[11px]">
+                Total count:{emittedMessage?.length}
+              </span>
+            </span>
             {emittedMessage?.length > 0 ? (
               <span
                 onClick={() => setEmittedMessage([])}
@@ -33,7 +38,12 @@ export const MessageContainer = ({
           <div
             className={`border-b-2 border-blue-200 w-full flex justify-center gap-10 items-center`}
           >
-            <span className="font-bold text-[13px]">Subscribed Message</span>
+            <span className="font-bold text-[13px] flex gap-2 items-center">
+              Subscribed Message
+              <span className="text-[11px]">
+                Total count:{subscribedMessage?.length}
+              </span>
+            </span>
             {subscribedMessage?.length > 0 ? (
               <span
                 onClick={() => setSubscribedMessage([])}
