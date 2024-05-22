@@ -118,3 +118,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+const abcd = { en: "app-report", fr: "test" };
+console.log(abcd["en"]);

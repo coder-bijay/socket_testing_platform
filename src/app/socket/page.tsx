@@ -324,17 +324,13 @@ function Home() {
                     </div>
                   </div>
                   <button
-                    disabled={!jsonData}
                     onClick={() => {
                       sendMessage(eventName);
                       CopyPayload();
                       setJsonData("");
                     }}
-                    className={`${
-                      !jsonData
-                        ? "bg-blue-200 cursor-not-allowed"
-                        : "bg-blue-400 cursor-pointer"
-                    } p-2 w-24  rounded-lg text-white`}
+                    className={`
+                     cursor-pointer p-2 w-24 bg-blue-400 rounded-lg text-white`}
                   >
                     Send
                   </button>
