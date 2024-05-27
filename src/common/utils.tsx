@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const setSessionAndToken = ({
   serverBaseUrl,
+  loginUrl,
   accessToken,
   refreshToken,
   sessionId,
@@ -13,6 +14,7 @@ export const setSessionAndToken = ({
 }: {
   serverBaseUrl?: string;
   accessToken?: string;
+  loginUrl?: string;
   refreshToken?: string;
   sessionId?: string;
   socketUrl?: string;
@@ -21,6 +23,7 @@ export const setSessionAndToken = ({
   userId?: string;
 }) => {
   serverBaseUrl && cookies.set("baseUrl", serverBaseUrl);
+  loginUrl && cookies.set("loginUrl", loginUrl);
   accessToken && cookies.set("token", accessToken);
   refreshToken && cookies.set("refreshToken", refreshToken);
   sessionId && cookies.set("sessionId", sessionId);
@@ -32,6 +35,7 @@ export const setSessionAndToken = ({
 
 export function getStoredSessionAndToken() {
   let serverBaseUrl: string | undefined;
+  let loginUrl: string | undefined;
   let accessToken: string | undefined;
   let refreshToken: string | undefined;
   let sessionId: string | undefined;
@@ -42,6 +46,7 @@ export function getStoredSessionAndToken() {
 
   if (typeof window !== "undefined") {
     serverBaseUrl = cookies.get("baseUrl");
+    loginUrl = cookies.get("loginUrl");
     accessToken = cookies.get("token");
     refreshToken = cookies.get("refreshToken");
     sessionId = cookies.get("sessionId");
@@ -52,6 +57,7 @@ export function getStoredSessionAndToken() {
 
     return {
       serverBaseUrl,
+      loginUrl,
       accessToken,
       refreshToken,
       sessionId,
@@ -71,6 +77,7 @@ export default function HandleUnauthorizedToken() {
   cookies.remove("sessionId");
   cookies.remove("socketPath");
   cookies.remove("socketUrl");
+  cookies.remove("loginUrl");
   cookies.remove("baseUrl");
 }
 

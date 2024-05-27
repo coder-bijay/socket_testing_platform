@@ -82,7 +82,7 @@ export default function RootLayout({
                       {(storedData?.userId || configuration?.userId) && (
                         <div className="flex gap-2">
                           <span className="font-bold text-[14px]">
-                            UserId :{" "}
+                            UserId :
                           </span>
                           <span className="font-bold text-[14px] flex gap-2 items-center text-blue-500">
                             {storedData?.userId
@@ -91,7 +91,9 @@ export default function RootLayout({
 
                             <CopyContent
                               content={
-                                storedData?.userId || configuration?.userId
+                                storedData?.userId ||
+                                configuration?.userId ||
+                                ""
                               }
                             />
                           </span>
@@ -103,7 +105,7 @@ export default function RootLayout({
                         HandleUnauthorizedToken();
                         window.location.reload();
                       }}
-                      className="bg-blue-400 text-white rounded-md cursor-pointer px-4 p-2"
+                      className="bg-blue-500 text-white rounded-md cursor-pointer px-4 p-2"
                     >
                       Logout
                     </div>

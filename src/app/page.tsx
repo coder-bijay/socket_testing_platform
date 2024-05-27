@@ -3,6 +3,7 @@ import { getStoredSessionAndToken, setSessionAndToken } from "@/common/utils";
 import { ExampleComponent } from "@/components/ExampleComponent";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useConfigurationSlice } from "./_store/userslice";
 
 export default function Home() {
   const [socketPath, setSocketPath] = useState("/ws");
@@ -10,6 +11,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const storedData = getStoredSessionAndToken();
+
+  const { setConfiguration } = useConfigurationSlice((state) => ({
+    setConfiguration: state.setConfiguration,
+  }));
 
   const handleConfiguration = (event: any) => {
     setLoading(true);
@@ -23,6 +28,10 @@ export default function Home() {
       socketUrl: socketUrl,
       socketPath: socketPath,
     });
+    setConfiguration({
+      socketPath,
+      socketUrl,
+    });
     router.push("/socket");
     setLoading(false);
   };
@@ -31,15 +40,17 @@ export default function Home() {
       <div className="flex flex-col gap-20 justify-between p-6 px-20 items-center">
         <div className="w-full pb-20 shadow-lg border rounded-md flex flex-col gap-6 py-5 px-6">
           <div className="flex flex-col gap-2">
-            <h1 className="font-bold">Examples</h1>
+            <h1 className="font-bold text-xl underline">Examples</h1>
             <ExampleComponent />
           </div>
           <form
             onSubmit={handleConfiguration}
             className="mt-10 flex flex-col gap-6"
           >
-            <h1 className="font-bold text-xl">Configuration Window</h1>
-            <div className="flex flex-col gap-2">
+            <h1 className="font-bold text-xl underline">
+              Configuration Window
+            </h1>
+            <div className="flex flex-col gap-2 text-sm">
               <label>Socket Url</label>
               <input
                 autoFocus={true}
@@ -52,7 +63,7 @@ export default function Home() {
                 placeholder="Enter socket Url"
               />
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 text-sm">
               <label>socket Path</label>
               <input
                 className="p-2 border border-gray-400 rounded-lg"

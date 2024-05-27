@@ -132,7 +132,7 @@ function Home() {
                       console.log("Socket has been connected!", socket);
                     });
                   }}
-                  className={`p-2 text-sm bg-green-700 ${
+                  className={`p-1.5 text-sm bg-green-700 ${
                     !eventName
                       ? "bg-gray-500 cursor-not-allowed"
                       : !connected
@@ -154,7 +154,7 @@ function Home() {
                         console.log("Socket has been dis-connected!", socket);
                       });
                     }}
-                    className="p-2 bg-red-500 text-sm rounded-lg text-white"
+                    className="p-1.5 bg-red-500 text-sm rounded-lg text-white"
                   >
                     Disconnect
                   </button>
@@ -165,9 +165,9 @@ function Home() {
             {connected ? (
               <>
                 <div className="flex flex-col gap-4 mx-2 h-fit bg-gray-200 rounded-md border p-2">
-                  <div className="flex w-full gap-10 pb-2 text-sm justify-between border-2 border-b-blue-500 items-center">
+                  <div className="flex w-full gap-10 pb-1 text-sm justify-between border-2 border-b-blue-500 items-center">
                     <input
-                      className="p-2 w-1/2 border border-gray-400 rounded-lg"
+                      className="p-1.5 w-1/2 border border-gray-400 rounded-lg"
                       type="text"
                       value={subscribeEventName}
                       placeholder="Ex: group:message-response"
@@ -180,7 +180,7 @@ function Home() {
                       <button
                         disabled={!subscribeEventName}
                         onClick={() => handleSubscribe(subscribeEventName)}
-                        className={`p-2 ${
+                        className={`p-1.5 text-sm ${
                           subscribeEventName
                             ? "bg-green-700 cursor-pointer"
                             : "bg-green-400 cursor-not-allowed"
@@ -196,7 +196,7 @@ function Home() {
                             subscribedEvents,
                           })
                         }
-                        className={`p-2 bg-green-700 cursor-pointer rounded-lg text-white `}
+                        className={`p-1.5 bg-blue-500 cursor-pointer rounded-lg text-white `}
                       >
                         All
                       </button>
@@ -270,10 +270,10 @@ function Home() {
                 </div>
 
                 <div className="w-full flex flex-col px-2 gap-6">
-                  <div className="flex text-sm flex-col w-full gap-2">
-                    <label>EventName</label>
+                  <div className="flex flex-col w-full gap-2">
+                    <label className="text-sm">EventName</label>
                     <input
-                      className="p-2 w-full border border-gray-400 rounded-lg"
+                      className="p-2 w-full border text-sm border-gray-400 rounded-lg"
                       type="text"
                       value={eventName}
                       placeholder=" Enter eventName (Ex: group:message)"
@@ -285,14 +285,14 @@ function Home() {
 
                   <div className="flex flex-col w-full gap-2">
                     <div className="flex flex-col justify-between items-center">
-                      <div className="flex flex-row w-full pb-2 text-sm justify-between items-center">
-                        <label>Payload</label>
+                      <div className="flex flex-row w-full pb-2 justify-between items-center">
+                        <label className="text-sm">Payload</label>
                         <span
                           onClick={() => {
                             setIsCopied(true);
                             CopyPayload();
                           }}
-                          className="flex items-center gap-2 cursor-pointer"
+                          className="flex text-sm items-center gap-2 cursor-pointer"
                         >
                           Copy payload
                           <span>
@@ -327,10 +327,9 @@ function Home() {
                     onClick={() => {
                       sendMessage(eventName);
                       CopyPayload();
-                      setJsonData("");
                     }}
                     className={`
-                     cursor-pointer p-2 w-24 bg-blue-400 rounded-lg text-white`}
+                     cursor-pointer p-2 w-24 bg-blue-500 rounded-lg text-white`}
                   >
                     Send
                   </button>

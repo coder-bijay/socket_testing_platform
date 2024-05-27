@@ -4,16 +4,16 @@ import { devtools } from "zustand/middleware";
 
 interface IConfiguration {
   configuration: {
-    username: string;
-    userId: string;
-    socketPath: string;
-    socketUrl: string;
+    username?: string;
+    userId?: string;
+    socketPath?: string;
+    socketUrl?: string;
   };
   setConfiguration: (payload: {
-    username: string;
-    userId: string;
-    socketPath: string;
-    socketUrl: string;
+    username?: string;
+    userId?: string;
+    socketPath?: string;
+    socketUrl?: string;
   }) => void;
 }
 
@@ -26,10 +26,10 @@ export const useConfigurationSlice = create<IConfiguration>()(
       socketPath: "",
     },
     setConfiguration: (payload: {
-      userId: string;
-      username: string;
-      socketPath: string;
-      socketUrl: string;
+      userId?: string;
+      username?: string;
+      socketPath?: string;
+      socketUrl?: string;
     }) => {
       set(
         produce<IConfiguration>((draft) => {

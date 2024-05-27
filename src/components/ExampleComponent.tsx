@@ -29,15 +29,15 @@ export const ExampleComponent = () => {
               className="flex font-bold flex-row items-center text-gray-400 gap-2"
               key={index}
             >
-              <span>{item.title} : </span>
-              <span className="text-blue-500">{item.value}</span>
+              <span className="text-[15px]">{item.title} : </span>
+              <span className="text-blue-500 text-sm">{item.value}</span>
               <CopyContent content={item.value} />
             </div>
           );
         })}
         <div className="flex font-bold flex-row items-center text-gray-400 gap-2">
-          <span>Socket Path : </span>
-          <span className="text-blue-500">/ws</span>
+          <span className="text-[15px]">Socket Path : </span>
+          <span className="text-blue-500 text-sm">/ws</span>
           <CopyContent content={`/ws`} />
         </div>
       </div>

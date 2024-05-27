@@ -22,7 +22,7 @@ const generateRandomWord = () => {
 };
 
 const Login = () => {
-  const [baseUrl, setBaseUrl] = useState(
+  const [loginUrl, setLoginUrl] = useState(
     "https://dev-api.marsenger.com/api/v2/auth/login"
   );
   const [username, setusername] = useState("");
@@ -56,7 +56,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(baseUrl, {
+      const { data } = await axios.post(loginUrl, {
         username,
         password,
         registrationToken: `${randomWord}n1boH6po7f8OBYT1SGGQn:Awao1fEeJPOzzqd2oqg2tflnZ_e1uZF5p4AbbFrVHMOLb6Znh6Uhe_vYxDit41J3KFbzUKYybpLKiwFTEdSq-yRSqFbJsbsQNuV3kF1ACsKUd-lK_8RXFoyAeGCje2vg6D_QMJq3fm6i`,
@@ -64,7 +64,8 @@ const Login = () => {
       });
 
       setSessionAndToken({
-        serverBaseUrl: baseUrl,
+        serverBaseUrl: loginUrl.split("/api/")[0] || loginUrl,
+        loginUrl: loginUrl,
         accessToken: data?.data?.accessToken,
         refreshToken: data?.data?.refreshToken,
         sessionId: data?.data?.sessionId,
@@ -140,12 +141,12 @@ const Login = () => {
                 )
               </label>
               <input
-                value={baseUrl}
+                value={loginUrl}
                 autoComplete="on"
                 className="p-2 border border-gray-400 rounded-lg"
                 type="text"
                 onChange={(e) => {
-                  setBaseUrl(e.target.value);
+                  setLoginUrl(e.target.value);
                 }}
                 placeholder="Please specify the login url"
               />
