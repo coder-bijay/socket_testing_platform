@@ -1,25 +1,19 @@
 "use client";
-import { setSessionAndToken } from "@/common/utils";
+import {
+  generateDeviceId,
+  generateRandomWord,
+  setSessionAndToken,
+} from "@/common/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useConfigurationSlice } from "../_store/userslice";
 import { ErrorMessageContainer } from "../../components/ErrorMessage";
 import { CopyContent } from "@/components/CopyContent";
+import { BiRefresh } from "react-icons/bi";
 
 // user1 = "bijay_subedi_dev2",pw:"3Cna0g$1"
 // user2 = "bijay_subedi_dev",pw:"3Q#Aq@W9"
-
-const generateRandomWord = () => {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let randomWord = "";
-  for (let i = 0; i < 8; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    randomWord += characters[randomIndex];
-  }
-  return randomWord;
-};
 
 const Login = () => {
   const [loginUrl, setLoginUrl] = useState(
@@ -27,6 +21,7 @@ const Login = () => {
   );
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
+  const [deviceId, setDeviceId] = useState(generateDeviceId());
 
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState<{
@@ -43,6 +38,15 @@ const Login = () => {
     setConfiguration: state.setConfiguration,
   }));
 
+  const Axios = axios.create({
+    withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+      "device-id": deviceId,
+    },
+    baseURL: loginUrl,
+  });
+
   useEffect(() => {
     return () => {
       setResponseMessage({
@@ -56,11 +60,10 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(loginUrl, {
+      const { data } = await Axios.post(loginUrl, {
         username,
         password,
         registrationToken: `${randomWord}n1boH6po7f8OBYT1SGGQn:Awao1fEeJPOzzqd2oqg2tflnZ_e1uZF5p4AbbFrVHMOLb6Znh6Uhe_vYxDit41J3KFbzUKYybpLKiwFTEdSq-yRSqFbJsbsQNuV3kF1ACsKUd-lK_8RXFoyAeGCje2vg6D_QMJq3fm6i`,
-        deviceId: `${randomWord}2102J20SG::SKQ1.211006.001`,
       });
 
       setSessionAndToken({
@@ -150,6 +153,28 @@ const Login = () => {
                 }}
                 placeholder="Please specify the login url"
               />
+              <div className="flex flex-col gap-2 text-sm">
+                <label>Headers (device-id)</label>
+                <div className="flex relative w-full">
+                  <input
+                    autoComplete="on"
+                    className="p-2 border border-gray-400 rounded-lg w-full"
+                    type="text"
+                    value={deviceId}
+                    onChange={(e) => {
+                      setDeviceId(e.target.value);
+                    }}
+                    placeholder="Password"
+                  />
+                  <BiRefresh
+                    onClick={() => {
+                      const device = generateDeviceId();
+                      setDeviceId(device);
+                    }}
+                    className="absolute right-2 cursor-pointer top-2 w-6 h-6"
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-col gap-2 text-sm">
@@ -176,6 +201,7 @@ const Login = () => {
                 placeholder="Password"
               />
             </div>
+
             {responseMessage?.message && (
               <ErrorMessageContainer
                 type={responseMessage?.type}

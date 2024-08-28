@@ -119,6 +119,17 @@ export const formatString = (originalString: any) => {
   }
 };
 
+export const generateRandomWord = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomWord = "";
+  for (let i = 0; i < 8; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomWord += characters[randomIndex];
+  }
+  return randomWord;
+};
+
 export const generatePayload = () => {
   const payload = {
     messageId: uuidv4(),
@@ -127,6 +138,11 @@ export const generatePayload = () => {
     groupId: "ab775113-8e44-4a90-bada-784cd9b59111",
   };
   return payload;
+};
+
+export const generateDeviceId = () => {
+  const randomWord = generateRandomWord();
+  return `${randomWord}_FromSocketTest`;
 };
 
 export const subscribeEventList = {
