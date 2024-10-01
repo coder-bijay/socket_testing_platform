@@ -7,6 +7,8 @@ import {
 } from "@/common/utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   MdArrowDropDown,
   MdArrowDropUp,
@@ -34,6 +36,11 @@ const CopyPayload = () => {
 };
 
 function Home() {
+  const [apiCallCount, setApiCallCount] = useState<number>(10);
+  const [tempEventName, setTempEventName] = useState("group:message");
+  const [tempGroupId, setTempGroupId] = useState("");
+  // for the testing
+
   const [connected, setConnected] = useState(false);
   const [jsonData, setJsonData] = useState("");
 
@@ -43,7 +50,7 @@ function Home() {
   const [subscribeEventName, setSubscribeEventName] = useState("");
   const [subscribedEvents, setSubscribedEvents] = useState<string[]>([]);
   const [subscribedMessage, setSubscribedMessage] = useState<any[]>([]);
-  const [showSubscribedList, setShowSubscribedList] = useState(true);
+  const [showSubscribedList, setShowSubscribedList] = useState(false);
 
   const [isCopied, setIsCopied] = useState(false);
 
@@ -104,6 +111,24 @@ function Home() {
   }, []);
 
   console.log({ socket, emittedMessage, subscribedMessage, subscribedEvents });
+
+  const triggerMessage = () => {
+    for (let i = 1; i <= apiCallCount; i++) {
+      setTimeout(() => {
+        socket.emit(
+          `${tempEventName}`,
+          {
+            data: `hello dev - ${i}`,
+            iv: `${i}`,
+            groupId: tempGroupId,
+          },
+          (data: any) => {
+            setEmittedMessage((prev) => [{ [tempEventName]: data }, ...prev]);
+          }
+        );
+      }, i * 200);
+    }
+  };
 
   return (
     <>
@@ -333,6 +358,51 @@ function Home() {
                   >
                     Send
                   </button>
+                </div>
+
+                {/* for the testing  */}
+
+                <div className="flex flex-col gap-1 px-2">
+                  <input
+                    className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                    type="text"
+                    value={tempEventName}
+                    placeholder=" Enter temp eventName"
+                    onChange={(e) => {
+                      setTempEventName(e.target.value);
+                    }}
+                  />
+
+                  <input
+                    className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                    type="text"
+                    value={tempGroupId}
+                    placeholder=" Enter temp group Id"
+                    onChange={(e) => {
+                      setTempGroupId(e.target.value);
+                    }}
+                  />
+
+                  <input
+                    className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                    type="number"
+                    value={apiCallCount}
+                    placeholder=" Enter the message count"
+                    onChange={(e) => {
+                      console.log("setApiCallCount :::", e.target.value);
+                      console.log("apiCalls ::", apiCallCount);
+                      setApiCallCount(Number(e.target.value));
+                    }}
+                  />
+                  {tempGroupId && apiCallCount > 0 && (
+                    <button
+                      onClick={triggerMessage}
+                      className={`
+                     cursor-pointer p-2 w-24 bg-blue-500 rounded-lg text-white`}
+                    >
+                      Trigger Messages
+                    </button>
+                  )}
                 </div>
               </>
             ) : (
