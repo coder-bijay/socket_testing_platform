@@ -37,8 +37,11 @@ const CopyPayload = () => {
 
 function Home() {
   const [apiCallCount, setApiCallCount] = useState<number>(10);
+  const [duration, setDuration] = useState<number>(200);
+  const [progressState, setProgressState] = useState(false);
   const [tempEventName, setTempEventName] = useState("group:message");
   const [tempGroupId, setTempGroupId] = useState("");
+  const [isBulk, setIsBulk] = useState(false);
   // for the testing
 
   const [connected, setConnected] = useState(false);
@@ -113,6 +116,7 @@ function Home() {
   console.log({ socket, emittedMessage, subscribedMessage, subscribedEvents });
 
   const triggerMessage = () => {
+    setProgressState(true);
     for (let i = 1; i <= apiCallCount; i++) {
       setTimeout(() => {
         socket.emit(
@@ -126,7 +130,12 @@ function Home() {
             setEmittedMessage((prev) => [{ [tempEventName]: data }, ...prev]);
           }
         );
-      }, i * 200);
+        if (i === apiCallCount) {
+          setProgressState(false);
+        }
+      }, i * duration);
+
+      setProgressState(false);
     }
   };
 
@@ -134,7 +143,7 @@ function Home() {
     <>
       <div className="flex justify-center px-10 py-4 items-center">
         <div className="flex w-full gap-8">
-          <div className="flex flex-col w-1/2 shadow-md rounded-md border gap-6">
+          <div className="flex flex-col w-1/2 shadow-md rounded-md border gap-6 pb-10">
             <div className="flex justify-between w-full gap-10 items-center rounded-t-md border-b-2 border-blue-200 py-1 px-2">
               <div
                 className={`h-5 w-5 rounded-full ${
@@ -360,50 +369,94 @@ function Home() {
                   </button>
                 </div>
 
-                {/* for the testing  */}
-
-                <div className="flex flex-col gap-1 px-2">
-                  <input
-                    className="p-2 w-full border text-sm border-gray-400 rounded-lg"
-                    type="text"
-                    value={tempEventName}
-                    placeholder=" Enter temp eventName"
-                    onChange={(e) => {
-                      setTempEventName(e.target.value);
-                    }}
-                  />
-
-                  <input
-                    className="p-2 w-full border text-sm border-gray-400 rounded-lg"
-                    type="text"
-                    value={tempGroupId}
-                    placeholder=" Enter temp group Id"
-                    onChange={(e) => {
-                      setTempGroupId(e.target.value);
-                    }}
-                  />
-
-                  <input
-                    className="p-2 w-full border text-sm border-gray-400 rounded-lg"
-                    type="number"
-                    value={apiCallCount}
-                    placeholder=" Enter the message count"
-                    onChange={(e) => {
-                      console.log("setApiCallCount :::", e.target.value);
-                      console.log("apiCalls ::", apiCallCount);
-                      setApiCallCount(Number(e.target.value));
-                    }}
-                  />
-                  {tempGroupId && apiCallCount > 0 && (
-                    <button
-                      onClick={triggerMessage}
-                      className={`
-                     cursor-pointer p-2 w-24 bg-blue-500 rounded-lg text-white`}
-                    >
-                      Trigger Messages
-                    </button>
+                {/* for the bulk messages  */}
+                <div
+                  className="bg-blue-500 text-white flex cursor-pointer justify-between items-center px-4"
+                  onClick={() => setIsBulk((prev) => !prev)}
+                >
+                  Bulk Messages
+                  {isBulk ? (
+                    <MdArrowDropDown
+                      onClick={() => setIsBulk(true)}
+                      className="h-8 cursor-pointer w-8 text-white"
+                    />
+                  ) : (
+                    <MdArrowDropUp
+                      onClick={() => setIsBulk(false)}
+                      className="h-8 cursor-pointer w-8 text-white"
+                    />
                   )}
                 </div>
+                {isBulk && (
+                  <div className="flex flex-col gap-3 px-2">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1">
+                        <label>Triggered Duration:</label>
+                        <input
+                          className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                          type="number"
+                          value={duration}
+                          placeholder="Enter triggered duration"
+                          onChange={(e) => {
+                            setDuration(Number(e.target.value));
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label>Triggered messages count:</label>
+                        <input
+                          className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                          type="number"
+                          value={apiCallCount}
+                          placeholder=" Enter the message count"
+                          onChange={(e) => {
+                            console.log("setApiCallCount :::", e.target.value);
+                            console.log("apiCalls ::", apiCallCount);
+                            setApiCallCount(Number(e.target.value));
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label>Event Name:</label>
+                      <input
+                        className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                        type="text"
+                        value={tempEventName}
+                        placeholder=" Enter temp eventName"
+                        onChange={(e) => {
+                          setTempEventName(e.target.value);
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <label>Group Id:</label>
+                      <input
+                        className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                        type="text"
+                        value={tempGroupId}
+                        placeholder=" Enter temp group Id"
+                        onChange={(e) => {
+                          setTempGroupId(e.target.value);
+                        }}
+                      />
+                    </div>
+
+                    {tempGroupId && apiCallCount > 0 && (
+                      <button
+                        onClick={triggerMessage}
+                        disabled={progressState}
+                        className={`
+                     cursor-pointer ${
+                       progressState ? "bg-blue-200 " : "bg-blue-500 "
+                     } p-2 w-52 rounded-lg text-white`}
+                      >
+                        Trigger Messages
+                      </button>
+                    )}
+                  </div>
+                )}
               </>
             ) : (
               <div className="w-11/12 flex h-[300px] justify-center text-[14px] text-blue-400 font-bold animate-pulse items-center gap-6 p-10">
