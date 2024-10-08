@@ -41,6 +41,7 @@ function Home() {
   const [progressState, setProgressState] = useState(false);
   const [tempEventName, setTempEventName] = useState("group:message");
   const [tempGroupId, setTempGroupId] = useState("");
+  const [tempMessage, setTempMessage] = useState("hello dev");
   const [isBulk, setIsBulk] = useState(false);
   // for the testing
 
@@ -122,7 +123,7 @@ function Home() {
         socket.emit(
           `${tempEventName}`,
           {
-            data: `hello dev - ${i}`,
+            data: `${tempMessage} - ${i}`,
             iv: `${i}`,
             groupId: tempGroupId,
             messageId: uuidv4(),
@@ -418,17 +419,31 @@ function Home() {
                         />
                       </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <label>Event Name:</label>
-                      <input
-                        className="p-2 w-full border text-sm border-gray-400 rounded-lg"
-                        type="text"
-                        value={tempEventName}
-                        placeholder=" Enter temp eventName"
-                        onChange={(e) => {
-                          setTempEventName(e.target.value);
-                        }}
-                      />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1">
+                        <label>Event Name:</label>
+                        <input
+                          className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                          type="text"
+                          value={tempEventName}
+                          placeholder=" Enter temp eventName"
+                          onChange={(e) => {
+                            setTempEventName(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label>message:</label>
+                        <input
+                          className="p-2 w-full border text-sm border-gray-400 rounded-lg"
+                          type="text"
+                          value={tempMessage}
+                          placeholder=" Enter message"
+                          onChange={(e) => {
+                            setTempMessage(e.target.value);
+                          }}
+                        />
+                      </div>
                     </div>
 
                     <div className="flex flex-col gap-1">
