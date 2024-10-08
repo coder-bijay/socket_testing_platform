@@ -125,6 +125,7 @@ function Home() {
             data: `hello dev - ${i}`,
             iv: `${i}`,
             groupId: tempGroupId,
+            messageId: uuidv4(),
           },
           (data: any) => {
             setEmittedMessage((prev) => [{ [tempEventName]: data }, ...prev]);

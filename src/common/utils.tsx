@@ -195,6 +195,7 @@ export const subscribeEventList = {
     "channel:reply-delete-for-everyone-response",
 
   // group
+  GROUP_MESSAGE_SENT: "group:message-sent",
   GROUP_CREATED_RESPONSE: "group:created-response",
   GROUP_ADD_MEMBER_RESPONSE: "group:add-member-response",
   GROUP_NEW_MEMBER_RESPONSE: "group:new-member-response",
