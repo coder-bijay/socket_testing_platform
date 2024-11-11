@@ -124,7 +124,8 @@ function Home() {
           `${tempEventName}`,
           {
             data: `${tempMessage} - ${i}`,
-            iv: `${i}`,
+            iv: `ZGVmYXVsdA==`,
+            recordedAt: new Date().toISOString(),
             groupId: tempGroupId,
             messageId: uuidv4(),
           },
@@ -353,6 +354,7 @@ function Home() {
                         placeholder={`      {
          "messageId": "49d77e97-0c9e-4b3e-b70e-fb433db0b5a3",
           "data": "Hey",
+           "iv": "ZGVmYXVsdA==",
           "createdAt": "2023-11-03T15:30:00Z",
           "groupId": "974c1a3d-b98b-4dee-b67a-da7f858d0dd5"
           }`}

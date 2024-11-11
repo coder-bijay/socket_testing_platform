@@ -134,6 +134,7 @@ export const generatePayload = () => {
   const payload = {
     messageId: uuidv4(),
     data: "Hey",
+    iv: "ZGVmYXVsdA==",
     createdAt: new Date().toISOString(),
     groupId: "ab775113-8e44-4a90-bada-784cd9b59111",
   };
