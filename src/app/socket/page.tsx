@@ -125,7 +125,7 @@ function Home() {
           {
             data: `${tempMessage} - ${i}`,
             iv: `ZGVmYXVsdA==`,
-            recordedAt: Date.now(),
+            recordedAt: `${Date.now()}`,
             groupId: tempGroupId,
             messageId: uuidv4(),
           },
