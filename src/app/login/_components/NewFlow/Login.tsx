@@ -7,17 +7,28 @@ import {
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { CopyContent } from "@/components/CopyContent";
 import { BiRefresh } from "react-icons/bi";
 import { useConfigurationSlice } from "@/app/_store/userslice";
 import { ErrorMessageContainer } from "@/components/ErrorMessage";
 import { ServerInfo } from "../ServerInfo";
 
-export const Login = () => {
+export const Login = ({
+  apiResponse,
+}: {
+  apiResponse: {
+    hasSignedUp: boolean | null;
+    phoneNumber: string;
+    code: string;
+    verifyOtpSuccess?: boolean | null;
+    signUpSuccess?: boolean | null;
+  };
+}) => {
   const [loginUrl, setLoginUrl] = useState(
     "https://dev-api.marsenger.com/api/v2/auth/v2/login"
   );
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(
+    apiResponse?.phoneNumber || ""
+  );
   //   const [password, setpassword] = useState("");
   const [deviceId, setDeviceId] = useState(generateDeviceId());
 
@@ -69,14 +80,14 @@ export const Login = () => {
         accessToken: data?.data?.accessToken,
         refreshToken: data?.data?.refreshToken,
         sessionId: data?.data?.sessionId,
-        username: data?.data?.user?.username,
+        username: `${data?.data?.user?.fullname} (${data?.data?.user?.phoneNumber})`,
         userId: data?.data?.user?.id,
         socketUrl: "",
         socketPath: "",
       });
 
       setConfiguration({
-        username: data?.data?.user?.username,
+        username: data?.data?.user?.fullname,
       });
       setResponseMessage({
         message: "Successfully Logged in",

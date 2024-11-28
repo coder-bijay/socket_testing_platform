@@ -26,10 +26,13 @@ const LoginPage = () => {
       {apiResponse?.code && (
         <VerifyOtp apiResponse={apiResponse} setApiResponse={setApiResponse} />
       )}
-      {apiResponse?.verifyOtpSuccess === true && (
-        <SignUp apiResponse={apiResponse} setApiResponse={setApiResponse} />
+      {apiResponse?.verifyOtpSuccess === true &&
+        apiResponse?.hasSignedUp === false && (
+          <SignUp apiResponse={apiResponse} setApiResponse={setApiResponse} />
+        )}
+      {apiResponse?.hasSignedUp === true && apiResponse?.verifyOtpSuccess && (
+        <Login apiResponse={apiResponse} />
       )}
-      {<Login />}
     </div>
   );
 };
