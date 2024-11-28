@@ -45,7 +45,7 @@ export const VerifyOtp = ({
   }>({
     data: null,
     message: "",
-    type: "SUCCESS",
+    type: "",
   });
 
   const Axios = axios.create({
