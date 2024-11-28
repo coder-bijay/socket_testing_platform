@@ -28,7 +28,9 @@ export const VerifyOtp = ({
   const [url, setUrl] = useState(
     "https://dev-api.marsenger.com/api/v2/auth/v2/verify-otp"
   );
-  const [phoneNumber, setPhoneNumber] = useState("+9779811558820");
+  const [phoneNumber, setPhoneNumber] = useState(
+    apiResponse?.phoneNumber || ""
+  );
   const [otp, setOtp] = useState(apiResponse?.code || "");
   const [type, setType] = useState(
     apiResponse?.hasSignedUp === true
@@ -82,6 +84,7 @@ export const VerifyOtp = ({
       });
       setApiResponse({
         ...apiResponse,
+        phoneNumber: apiResponse?.phoneNumber,
         verifyOtpSuccess: data?.success,
       });
     } catch (err: any) {
@@ -106,43 +109,44 @@ export const VerifyOtp = ({
     <div className="w-full justify-center items-center flex">
       <form
         onSubmit={handleSubmit}
-        className={` ${
-          response.type ? "grid grid-cols-2 w-4/5 " : "flex flex-wrap w-[600px]"
-        } gap-20 shadow-md border p-6 rounded-lg`}
+        className={` 
+          grid grid-cols-1 w-full gap-10 shadow-md border p-6 rounded-lg`}
       >
         <div className="flex flex-col gap-4 w-full text-sm">
-          <div className="flex flex-col gap-2 text-sm">
-            <label className="w-full">
-              Verify OTP (
-              <span className="text-blue-500 text-sm font-bold">
-                Enter the valid OTP code to verify the OTP.
-              </span>
-              )
-            </label>
-            <input
-              value={url}
-              autoComplete="on"
-              className="p-2 border border-gray-400 rounded-lg"
-              type="text"
-              onChange={(e) => {
-                setUrl(e.target.value);
-              }}
-              placeholder="Please specify the login url"
-            />
-          </div>
-          <div className="flex flex-col gap-2 text-sm">
-            <label>Phone Number</label>
-            <div className="flex relative w-full">
+          <div className="flex flex-row gap-6 items-center w-full">
+            <div className="flex flex-col gap-2 text-sm w-full">
+              <label className="w-full">
+                Verify OTP (
+                <span className="text-blue-500 text-sm font-bold">
+                  Enter the valid OTP code to verify the OTP.
+                </span>
+                )
+              </label>
               <input
+                value={url}
                 autoComplete="on"
-                className="p-2 border border-gray-400 rounded-lg w-full"
+                className="p-2 border border-gray-400 rounded-lg"
                 type="text"
-                value={phoneNumber}
                 onChange={(e) => {
-                  setPhoneNumber(e.target.value);
+                  setUrl(e.target.value);
                 }}
-                placeholder="+9779811558820"
+                placeholder="Please specify the login url"
               />
+            </div>
+            <div className="flex flex-col gap-2 text-sm w-full">
+              <label>Phone Number</label>
+              <div className="flex relative w-full">
+                <input
+                  autoComplete="on"
+                  className="p-2 border border-gray-400 rounded-lg w-full"
+                  type="text"
+                  value={phoneNumber}
+                  onChange={(e) => {
+                    setPhoneNumber(e.target.value);
+                  }}
+                  placeholder="+9779811558820"
+                />
+              </div>
             </div>
           </div>
           <div className="flex flex-row gap-6 items-center">

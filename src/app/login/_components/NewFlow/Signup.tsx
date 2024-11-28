@@ -109,15 +109,18 @@ export const SignUp = ({
       <form
         onSubmit={handleSubmit}
         className={` ${
-          response.type ? "grid grid-cols-2 w-4/5 " : "flex flex-wrap w-[600px]"
+          response.type ? "grid grid-cols-2 w-full" : "flex flex-wrap w-full"
         } gap-20 shadow-md border p-6 rounded-lg`}
       >
         <div className="flex flex-col gap-4 w-full text-sm">
+          <h1 className="font-bold text-2xl w-full text-center  text-blue-700">
+            Signup Window
+          </h1>
           <div className="flex flex-col gap-2 text-sm">
             <label className="w-full">
-              Verify OTP (
+              Signup (
               <span className="text-blue-500 text-sm font-bold">
-                Enter the valid OTP code to verify the OTP.
+                Enter the you fullname.
               </span>
               )
             </label>
@@ -149,7 +152,7 @@ export const SignUp = ({
           </div>
           <div className="flex flex-row gap-6 items-center">
             <div className="flex flex-col gap-2 text-sm w-full">
-              <label>Fullname</label>
+              <label>Full name</label>
               <div className="flex relative w-full">
                 <input
                   autoComplete="on"
@@ -174,11 +177,11 @@ export const SignUp = ({
                 : "!bg-blue-600 !cursor-pointer"
             } rounded-lg text-white`}
           >
-            {loading ? "Loading..." : "Verify OTP"}
+            {loading ? "Loading..." : "Signup"}
           </button>
         </div>
         {response?.type && (
-          <div className="flex flex-col w-full gap-4">
+          <div className="flex flex-col w-full h-[400px] overflow-y-scroll gap-4">
             <div className="flex items-center gap-10">
               <label className="font-bold">Response:</label>
               <span

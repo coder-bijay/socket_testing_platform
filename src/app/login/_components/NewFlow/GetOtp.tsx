@@ -19,7 +19,7 @@ export const GetOtp = ({
   const [url, setUrl] = useState(
     "https://dev-api.marsenger.com/api/v2/auth/v2/get-otp"
   );
-  const [phoneNumber, setPhoneNumber] = useState("+9779811558820");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<{
     data?: {
@@ -65,7 +65,6 @@ export const GetOtp = ({
         phoneNumber,
       });
 
-      console.log("data ::::", data);
       setResponse({
         data: {
           hasSignedUp: data?.data?.hasSignedUp,
@@ -103,9 +102,7 @@ export const GetOtp = ({
     <div className="w-full justify-center items-center flex">
       <form
         onSubmit={handleSubmit}
-        className={` ${
-          response.type ? "grid grid-cols-2 w-4/5 " : "flex flex-wrap w-[600px]"
-        } gap-20 w-4/5 shadow-md border p-6 rounded-lg`}
+        className={` grid grid-cols-1 w-full gap-20 shadow-md border p-6 rounded-lg`}
       >
         <div className="flex flex-col gap-4 w-full text-sm">
           <div className="flex flex-col gap-2 text-sm">

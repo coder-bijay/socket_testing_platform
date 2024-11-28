@@ -114,10 +114,11 @@ export const Login = ({
 
   return (
     <div className="w-full flex justify-center py-6 items-center">
-      <div className="w-full lg:w-[800px] pb-20 shadow-lg border rounded-md flex flex-col gap-6 py-5 px-10">
-        <div className="p-10 flex flex-col gap-6">
-          <ServerInfo />
-          <h1 className="font-bold text-xl">Login Window</h1>
+      <div className="w-full pb-10 shadow-lg border rounded-md flex flex-col gap-6 py-8 px-10">
+        <h1 className="font-bold text-2xl w-full text-center  text-blue-700">
+          Login Window
+        </h1>
+        <div className="px-10 pb-10 flex flex-col gap-6">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-2 text-sm">
               <label className="w-full">
@@ -162,7 +163,7 @@ export const Login = ({
             </div>
 
             <div className="flex flex-col gap-2 text-sm">
-              <label>PhoneNumber</label>
+              <label>Phone Number</label>
               <input
                 autoComplete="on"
                 className="p-2 border border-gray-400 rounded-lg"
@@ -170,7 +171,7 @@ export const Login = ({
                 onChange={(e) => {
                   setPhoneNumber(e.target.value);
                 }}
-                placeholder="Phone Number"
+                placeholder="+9779811558820"
               />
             </div>
             {/* <div className="flex flex-col gap-2 text-sm">
@@ -208,7 +209,7 @@ export const Login = ({
                   : "!bg-blue-600 !cursor-pointer"
               } rounded-lg text-white`}
             >
-              {loading ? "Loading..." : "Submit"}
+              {loading ? "Loading..." : "Login"}
             </button>
 
             {/* <button
