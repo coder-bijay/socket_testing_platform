@@ -38,7 +38,7 @@ export const GetOtp = ({
       waitTime: null,
     },
     message: "",
-    type: "SUCCESS",
+    type: "",
   });
 
   const Axios = axios.create({
