@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import HandleUnauthorizedToken, {
   getStoredSessionAndToken,
-} from "@/common/utils";
+} from "@/common/utils/general";
 import { useConfigurationSlice } from "./_store/userslice";
 import { CopyContent } from "@/components/CopyContent";
 

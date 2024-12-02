@@ -1,5 +1,8 @@
 "use client";
-import { getStoredSessionAndToken, setSessionAndToken } from "@/common/utils";
+import {
+  getStoredSessionAndToken,
+  setSessionAndToken,
+} from "@/common/utils/general";
 import { ExampleComponent } from "@/components/ExampleComponent";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

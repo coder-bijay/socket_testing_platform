@@ -1,7 +1,13 @@
 "use client";
-import { generateDeviceId, generateRandomWord } from "@/common/utils";
+import {
+  generateDeviceId,
+  generateRandomWord,
+  setSessionAndToken,
+} from "@/common/utils/general";
+import { ErrorMessageContainer } from "@/components/ErrorMessage";
 import { JsonViewer } from "@textea/json-viewer";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClear } from "react-icons/ai";
 
@@ -32,7 +38,7 @@ export const SignUp = ({
   const [phoneNumber, setPhoneNumber] = useState(
     apiResponse?.phoneNumber || ""
   );
-  const [deviceId, setDeviceId] = useState(generateDeviceId());
+  const router = useRouter();
 
   const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(false);
@@ -50,7 +56,7 @@ export const SignUp = ({
     withCredentials: true,
     headers: {
       "Content-Type": "application/json",
-      "device-id": deviceId,
+      "device-id": generateDeviceId(),
     },
     baseURL: url,
   });
@@ -82,10 +88,23 @@ export const SignUp = ({
         message: data.message,
         type: "SUCCESS",
       });
+
+      setSessionAndToken({
+        serverBaseUrl: url.split("/api/")[0] || url,
+        accessToken: data?.data?.accessToken,
+        refreshToken: data?.data?.refreshToken,
+        sessionId: data?.data?.sessionId,
+        username: `${data?.data?.user?.fullname} (${data?.data?.user?.phoneNumber})`,
+        userId: data?.data?.user?.id,
+        socketUrl: "",
+        socketPath: "",
+      });
+
       setApiResponse({
         ...apiResponse,
         signUpSuccess: data?.success,
       });
+      router.push("/");
     } catch (err: any) {
       console.log(err);
       if (err.response && err.response.status === 404) {
@@ -105,11 +124,11 @@ export const SignUp = ({
   };
 
   return (
-    <div className="w-full justify-center items-center flex">
+    <div className="w-full justify-center items-center flex flex-col">
       <form
         onSubmit={handleSubmit}
         className={` ${
-          response.type ? "grid grid-cols-2 w-full" : "flex flex-wrap w-full"
+          response.type ? "grid grid-cols-1 w-full" : "flex flex-wrap w-full"
         } gap-20 shadow-md border p-6 rounded-lg`}
       >
         <div className="flex flex-col gap-4 w-full text-sm">
@@ -167,6 +186,19 @@ export const SignUp = ({
               </div>
             </div>
           </div>
+
+          {response?.message && (
+            <ErrorMessageContainer
+              type={response?.type}
+              message={response?.message}
+              onClose={() =>
+                setResponse({
+                  message: "",
+                  type: "",
+                })
+              }
+            />
+          )}
 
           <button
             disabled={!phoneNumber && loading}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getStoredSessionAndToken } from "./utils";
+import { getStoredSessionAndToken } from "./utils/general";
 
 const url = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 

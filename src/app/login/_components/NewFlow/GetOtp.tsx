@@ -3,18 +3,14 @@ import { JsonViewer } from "@textea/json-viewer";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClear } from "react-icons/ai";
+import { IData } from "../../page";
 
 export const GetOtp = ({
   setApiResponse,
+  apiResponse,
 }: {
-  setApiResponse: React.Dispatch<
-    React.SetStateAction<{
-      hasSignedUp: boolean | null;
-      phoneNumber: string;
-      code: string;
-      verifyOtpSuccess?: boolean | null;
-    }>
-  >;
+  apiResponse: IData;
+  setApiResponse: React.Dispatch<React.SetStateAction<IData>>;
 }) => {
   const [url, setUrl] = useState(
     "https://dev-api.marsenger.com/api/v2/auth/v2/get-otp"

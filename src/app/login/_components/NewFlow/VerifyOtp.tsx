@@ -3,34 +3,26 @@ import { JsonViewer } from "@textea/json-viewer";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineClear } from "react-icons/ai";
+import { IData } from "../../page";
+import { useConfigurationSlice } from "@/app/_store/userslice";
+import { Login } from "./Login";
+import { SignUp } from "./Signup";
 
 export const VerifyOtp = ({
   apiResponse,
   setApiResponse,
 }: {
-  apiResponse: {
-    hasSignedUp: boolean | null;
-    phoneNumber: string;
-    code: string;
-    verifyOtpSuccess?: boolean | null;
-    signUpSuccess?: boolean | null;
-  };
-  setApiResponse: React.Dispatch<
-    React.SetStateAction<{
-      hasSignedUp: boolean | null;
-      phoneNumber: string;
-      code: string;
-      verifyOtpSuccess?: boolean | null;
-      signUpSuccess?: boolean | null;
-    }>
-  >;
+  apiResponse: IData;
+  setApiResponse: React.Dispatch<React.SetStateAction<IData>>;
 }) => {
   const [url, setUrl] = useState(
     "https://dev-api.marsenger.com/api/v2/auth/v2/verify-otp"
   );
+
   const [phoneNumber, setPhoneNumber] = useState(
     apiResponse?.phoneNumber || ""
   );
+
   const [otp, setOtp] = useState(apiResponse?.code || "");
   const [type, setType] = useState(
     apiResponse?.hasSignedUp === true
@@ -76,7 +68,6 @@ export const VerifyOtp = ({
         type,
       });
 
-      console.log("data ::::", data);
       setResponse({
         data: data.data,
         message: data.message,
@@ -84,7 +75,6 @@ export const VerifyOtp = ({
       });
       setApiResponse({
         ...apiResponse,
-        phoneNumber: apiResponse?.phoneNumber,
         verifyOtpSuccess: data?.success,
       });
     } catch (err: any) {
@@ -106,7 +96,7 @@ export const VerifyOtp = ({
   };
 
   return (
-    <div className="w-full justify-center items-center flex">
+    <div className="w-full justify-center items-center flex flex-col">
       <form
         onSubmit={handleSubmit}
         className={` 
@@ -216,6 +206,19 @@ export const VerifyOtp = ({
           </div>
         )}
       </form>
+
+      <div className="grid grid-cols-1 w-full gap-10 mt-6">
+        {apiResponse?.phoneNumber &&
+        apiResponse?.verifyOtpSuccess &&
+        apiResponse?.hasSignedUp === true ? (
+          <Login apiResponse={apiResponse} />
+        ) : (
+          apiResponse?.hasSignedUp === false &&
+          apiResponse?.verifyOtpSuccess && (
+            <SignUp apiResponse={apiResponse} setApiResponse={setApiResponse} />
+          )
+        )}
+      </div>
     </div>
   );
 };

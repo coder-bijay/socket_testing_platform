@@ -3,14 +3,13 @@ import {
   generateDeviceId,
   generateRandomWord,
   setSessionAndToken,
-} from "@/common/utils";
+} from "@/common/utils/general";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { BiRefresh } from "react-icons/bi";
 import { useConfigurationSlice } from "@/app/_store/userslice";
 import { ErrorMessageContainer } from "@/components/ErrorMessage";
-import { ServerInfo } from "../ServerInfo";
 
 export const Login = ({
   apiResponse,
@@ -29,7 +28,11 @@ export const Login = ({
   const [phoneNumber, setPhoneNumber] = useState(
     apiResponse?.phoneNumber || ""
   );
-  //   const [password, setpassword] = useState("");
+
+  const { setConfiguration } = useConfigurationSlice((state: any) => ({
+    setConfiguration: state.setConfiguration,
+  }));
+
   const [deviceId, setDeviceId] = useState(generateDeviceId());
 
   const [loading, setLoading] = useState(false);
@@ -42,10 +45,9 @@ export const Login = ({
   });
   const router = useRouter();
 
+  console.log("apiResponse ::", apiResponse);
+
   const randomWord = generateRandomWord();
-  const { setConfiguration } = useConfigurationSlice((state: any) => ({
-    setConfiguration: state.setConfiguration,
-  }));
 
   const Axios = axios.create({
     withCredentials: true,
@@ -71,7 +73,7 @@ export const Login = ({
     try {
       const { data } = await Axios.post(loginUrl, {
         phoneNumber,
-        registrationToken: `${randomWord}n1boH6po7f8OBYT1SGGQn:Awao1fEeJPOzzqd2oqg2tflnZ_e1uZF5p4AbbFrVHMOLb6Znh6Uhe_vYxDit41J3KFbzUKYybpLKiwFTEdSq-yRSqFbJsbsQNuV3kF1ACsKUd-lK_8RXFoyAeGCje2vg6D_QMJq3fm6i`,
+        registrationToken: randomWord,
       });
 
       setSessionAndToken({
@@ -165,6 +167,7 @@ export const Login = ({
             <div className="flex flex-col gap-2 text-sm">
               <label>Phone Number</label>
               <input
+                value={phoneNumber}
                 autoComplete="on"
                 className="p-2 border border-gray-400 rounded-lg"
                 type="text"

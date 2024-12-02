@@ -4,7 +4,7 @@ import {
   generatePayload,
   getStoredSessionAndToken,
   handleSubscribeAllEvents,
-} from "@/common/utils";
+} from "@/common/utils/general";
 import React, { useCallback, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
