@@ -41,6 +41,7 @@ export const SignUp = ({
   const router = useRouter();
 
   const [fullname, setFullname] = useState("");
+  const [dob, setDob] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<{
     data?: boolean | null;
@@ -79,6 +80,7 @@ export const SignUp = ({
       const { data } = await Axios.post(url, {
         fullname,
         phoneNumber,
+        dob,
         registrationToken: `${randomWord}n1boH6po7f8OBYT1SGGQn:Awao1fEeJPOzzqd2oqg2tflnZ_e1uZF5p4AbbFrVHMOLb6Znh6Uhe_vYxDit41J3KFbzUKYybpLKiwFTEdSq-yRSqFbJsbsQNuV3kF1ACsKUd-lK_8RXFoyAeGCje2vg6D_QMJq3fm6i`,
       });
 
@@ -187,6 +189,24 @@ export const SignUp = ({
             </div>
           </div>
 
+          <div className="flex flex-row gap-6 items-center">
+            <div className="flex flex-col gap-2 text-sm w-full">
+              <label>Date Of Birth</label>
+              <div className="flex relative w-full">
+                <input
+                  autoComplete="on"
+                  className="p-2 border border-gray-400 rounded-lg w-full"
+                  type="text"
+                  value={dob}
+                  onChange={(e) => {
+                    setDob(e.target.value);
+                  }}
+                  placeholder="YYYY-MM-DD"
+                />
+              </div>
+            </div>
+          </div>
+
           {response?.message && (
             <ErrorMessageContainer
               type={response?.type}
@@ -201,7 +221,7 @@ export const SignUp = ({
           )}
 
           <button
-            disabled={!phoneNumber && loading}
+            disabled={!phoneNumber && !fullname && !dob && loading}
             type="submit"
             className={`p-2 text-sm bg-gray-700 ${
               !phoneNumber && loading
