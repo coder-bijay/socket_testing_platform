@@ -26,7 +26,7 @@ export const Login = ({
     "https://dev-api.marsenger.com/api/v2/auth/v2/login"
   );
   const [phoneNumber, setPhoneNumber] = useState(
-    apiResponse?.phoneNumber || ""
+    apiResponse?.phoneNumber || "+9779811558820"
   );
 
   const { setConfiguration } = useConfigurationSlice((state: any) => ({
@@ -44,8 +44,6 @@ export const Login = ({
     type: "SUCCESS",
   });
   const router = useRouter();
-
-  console.log("apiResponse ::", apiResponse);
 
   const randomWord = generateRandomWord();
 

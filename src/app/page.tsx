@@ -5,7 +5,7 @@ import {
 } from "@/common/utils/general";
 import { ExampleComponent } from "@/components/ExampleComponent";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useConfigurationSlice } from "./_store/userslice";
 
 export default function Home() {
@@ -18,6 +18,18 @@ export default function Home() {
   const { setConfiguration } = useConfigurationSlice((state) => ({
     setConfiguration: state.setConfiguration,
   }));
+
+  useEffect(() => {
+    if (storedData?.serverBaseUrl?.includes("dev-")) {
+      setSocketUrl("https://dev-messaging.marsenger.com");
+    } else if (storedData?.serverBaseUrl?.includes("staging-")) {
+      setSocketUrl("https://staging-messaging.marsenger.com");
+    } else {
+      setSocketUrl("https://chat-app.dev");
+    }
+  }, []);
+
+  console.log("socketUrl :::", socketUrl);
 
   const handleConfiguration = (event: any) => {
     setLoading(true);
