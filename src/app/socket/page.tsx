@@ -47,7 +47,6 @@ function Home() {
   // for the testing
 
   const [connected, setConnected] = useState(false);
-  const [connectionError, setConnectionError] = useState("");
   const [jsonData, setJsonData] = useState("");
 
   const [eventName, setEventName] = useState("group:message");
