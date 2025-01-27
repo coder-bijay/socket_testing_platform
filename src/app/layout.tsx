@@ -1,5 +1,5 @@
 "use client";
-
+import { ToastContainer } from "react-toastify";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import HandleUnauthorizedToken, {
@@ -23,6 +23,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <ToastContainer />
       <body className={inter.className}>
         <div className="flex flex-col gap-10">
           <div className="h-16 flex flex-row border justify-end shadow-md fixed z-50 bg-white items-center rounded-lg w-full">

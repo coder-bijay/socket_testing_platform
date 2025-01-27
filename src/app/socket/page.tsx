@@ -18,6 +18,7 @@ import {
 } from "react-icons/md";
 import { MessageContainer } from "../../components/MessageContainer";
 import { AiOutlineClear } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const storedData = getStoredSessionAndToken();
 
@@ -46,6 +47,7 @@ function Home() {
   // for the testing
 
   const [connected, setConnected] = useState(false);
+  const [connectionError, setConnectionError] = useState("");
   const [jsonData, setJsonData] = useState("");
 
   const [eventName, setEventName] = useState("group:message");
@@ -163,10 +165,24 @@ function Home() {
                   disabled={!eventName}
                   onClick={() => {
                     socket.connect();
-                    setConnected(true);
+
                     setSubscribedEvents(["exception"]);
                     socket.on("connect", () => {
                       console.log("Socket has been connected!", socket);
+                      if (socket.connected) {
+                        setConnected(true);
+                      }
+                    });
+                    socket.on("connect_error", (error) => {
+                      toast.error(error.message);
+                      console.error(
+                        "Connection error AMAR :::::",
+                        error.message
+                      );
+                      // Optional: Handle specific errors
+                      if (error.message === "invalid namespace") {
+                        console.error("Invalid namespace error!");
+                      }
                     });
                   }}
                   className={`p-1.5 text-sm bg-green-700 ${
@@ -187,7 +203,7 @@ function Home() {
                       setSubscribedEvents([]);
                       setEmittedMessage([]);
                       setSubscribedMessage([]);
-                      socket.on("disconnect", () => {
+                      socket.on("disconnect", (e) => {
                         console.log("Socket has been dis-connected!", socket);
                       });
                     }}
